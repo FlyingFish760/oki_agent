@@ -1,0 +1,18 @@
+{
+  "model_name_or_path": "qwen3.6-35b-a3b",
+  "train_file": "data/persona_train.jsonl",
+  "output_dir": "artifacts/oki-persona-lora",
+  "max_seq_length": 4096,
+  "num_train_epochs": 2,
+  "per_device_train_batch_size": 1,
+  "gradient_accumulation_steps": 16,
+  "learning_rate": 0.00015,
+  "warmup_ratio": 0.03,
+  "lr_scheduler_type": "cosine",
+  "lora_rank": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
+  "bnb_4bit_quant_type": "nf4",
+  "bnb_4bit_compute_dtype": "bfloat16"
+}
