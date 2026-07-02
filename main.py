@@ -1,5 +1,4 @@
-def main():
-    print("Hello from oki-agent!")
+from oki_agent.cli import main
 
 
 if __name__ == "__main__":

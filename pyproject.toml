@@ -1,7 +1,7 @@
 [project]
 name = "oki-agent"
 version = "0.1.0"
-description = "Add your description here"
+description = "Local personal AI assistant demo focused on persona fine-tuning and user-owned memory"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
