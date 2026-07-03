@@ -24,6 +24,11 @@ def main(argv: list[str] | None = None) -> int:
     eval_parser = subparsers.add_parser("eval-persona", help="Run a small A/B persona evaluation")
     eval_parser.add_argument("--offline", action="store_true", help="Use deterministic local fallback instead of Ollama")
 
+    train_parser = subparsers.add_parser("train-idle", help="Run local fine-tuning only when idle policy allows it")
+    train_parser.add_argument("--policy", default="training/local_idle_policy.json")
+    train_parser.add_argument("--config", default="training/qlora_config.json")
+    train_parser.add_argument("--execute", action="store_true", help="Actually launch training when policy allows it")
+
     memory_parser = subparsers.add_parser("memory", help="Inspect local memory")
     memory_parser.add_argument("--db", default=str(DEFAULT_DB_PATH), help="SQLite memory path")
     memory_subparsers = memory_parser.add_subparsers(dest="memory_command", required=True)
@@ -36,6 +41,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_chat(args.model, Path(args.db), args.offline)
     if args.command == "eval-persona":
         return run_eval(args.offline)
+    if args.command == "train-idle":
+        return run_train_idle(args.policy, args.config, args.execute)
     if args.command == "memory":
         return run_memory(args.memory_command, Path(args.db), getattr(args, "id", None))
     parser.error("unknown command")
@@ -70,6 +77,12 @@ def run_chat(model_kind: str, db_path: Path, offline: bool) -> int:
         for chunk in agent.stream_turn(user_text):
             print(chunk, end="", flush=True)
         print()
+
+
+def run_train_idle(policy: str, config: str, execute: bool) -> int:
+    from training.idle_trainer import run_idle_training
+
+    return run_idle_training(Path(policy), config, execute)
 
 
 def run_memory(command: str, db_path: Path, memory_id: int | None) -> int:
@@ -108,3 +121,5 @@ def run_eval(offline: bool) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+

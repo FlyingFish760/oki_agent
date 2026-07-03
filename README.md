@@ -9,7 +9,7 @@ local memory, and tools are gated by user control.
 - Baseline model: `qwen3.6-35b-a3b`
 - Persona model name used by the demo: `qwen3.6-35b-a3b-oki-lora`
 - Local inference target: Ollama or LM Studio with GGUF Q4_K_M
-- Offline training target: A100 80GB for QLoRA
+- Training target: the same personal machine during idle windows; cloud/A100 remains an optional accelerator for deadline risk
 
 ## Quick demo without model weights
 
@@ -57,6 +57,18 @@ uv run oki memory delete <id>
 Memories are stored in SQLite at `~/.oki/memory.sqlite3` by default. Use `--db` to
 point at a temporary database for demos or tests.
 
+## Local idle training
+
+The product condition is that inference and training can happen on the same personal machine. Oki therefore exposes a guarded idle-training runner. It is opt-in, dry-run by default, and checks the local policy before launching QLoRA.
+
+```bash
+uv run oki train-idle
+$env:OKI_ALLOW_LOCAL_TRAINING="1"
+uv run oki train-idle --execute
+```
+
+Policy lives in `training/local_idle_policy.json`. The first implementation checks the quiet-hour window, AC-power preference, and explicit user opt-in. A production build should add GPU temperature, VRAM pressure, foreground app, and user activity checks.
+
 ## Fine-tuning path
 
 - Persona rubric: `configs/persona_card.yaml`
@@ -67,3 +79,4 @@ point at a temporary database for demos or tests.
 
 The seed dataset is intentionally small. For the real interview run, expand it to
 300-800 curated multi-turn examples and mix in 10%-20% capability-retention data.
+

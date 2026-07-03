@@ -1,0 +1,14 @@
+{
+  "require_user_opt_in": true,
+  "require_ac_power": true,
+  "quiet_hours": {
+    "start": 23,
+    "end": 7
+  },
+  "max_training_hours_per_session": 2,
+  "notes": [
+    "Personal machine training is opt-in and should run only when the user is idle.",
+    "The first demo implementation evaluates policy and launches QLoRA only when --execute is supplied.",
+    "Future production versions should add GPU temperature, VRAM pressure, foreground app, and user activity checks."
+  ]
+}
