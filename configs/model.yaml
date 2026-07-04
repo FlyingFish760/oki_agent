@@ -4,11 +4,11 @@
 host: null                     # null = 默认 http://127.0.0.1:11434
 
 # base 模型（Ollama 中的名字，需先 `ollama pull` 或用 Modelfile 创建）
-chat_model: "qwen3-35b-a3b"
+chat_model: "qwen3.6:35b-a3b"
 
 # A/B 演示用：base vs base+人格适配器
 ab:
-  base_model: "qwen3-35b-a3b"          # 微调前
+  base_model: "qwen3.6:35b-a3b"          # 微调前
   persona_model: "oki-persona"          # 微调后（见 finetune/export/Modelfile 的 ADAPTER）
 
 # 生成参数

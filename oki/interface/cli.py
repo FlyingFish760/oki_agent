@@ -22,7 +22,7 @@ def _confirm(name: str, args: dict, preview: str) -> bool:
 
 def build_orchestrator() -> Orchestrator:
     cfg = load_config()
-    model = cfg.model.get("chat_model", "qwen3-35b-a3b")
+    model = cfg.model.get("chat_model", "qwen3.6:35b-a3b")
     client = OllamaClient(model=model, host=cfg.model.get("host"))
 
     persona_card = cfg.persona.get("card", {"name": "oki"})

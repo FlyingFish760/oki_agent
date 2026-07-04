@@ -15,7 +15,7 @@ from .models import MemoryItem, MemoryType
 EXTRACT_PROMPT = """你是记忆抽取器。阅读下面这轮对话，抽取值得长期保存的信息。
 只保留：关于用户的稳定事实、明确偏好、习惯做法、重要事件。忽略寒暄与临时信息。
 以 JSON 数组输出，每个元素形如：
-{"content": "...", "mtype": "semantic|episodic|procedural", "importance": 0.0-1.0, "subject_key": "可选归组键"}
+{{"content": "...", "mtype": "semantic|episodic|procedural", "importance": 0.0-1.0, "subject_key": "可选归组键"}}
 若无可记，输出 []。
 
 对话：
