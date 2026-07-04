@@ -1,0 +1,21 @@
+# 推理引擎层配置（默认走 Ollama）
+# 本机显存 32GB（可扩 48GB）：Qwen3.6-35B-A3B GGUF Q4_K_M 约 20GB，可跑。
+
+host: null                     # null = 默认 http://127.0.0.1:11434
+
+# base 模型（Ollama 中的名字，需先 `ollama pull` 或用 Modelfile 创建）
+chat_model: "qwen3-35b-a3b"
+
+# A/B 演示用：base vs base+人格适配器
+ab:
+  base_model: "qwen3-35b-a3b"          # 微调前
+  persona_model: "oki-persona"          # 微调后（见 finetune/export/Modelfile 的 ADAPTER）
+
+# 生成参数
+options:
+  temperature: 0.7
+  top_p: 0.9
+  num_ctx: 8192
+
+# thinking 展示策略：show | fold | hide（交互层读取）
+thinking: "fold"

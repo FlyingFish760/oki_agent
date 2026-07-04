@@ -1,0 +1,22 @@
+# Ollama Modelfile —— 创建微调后的 oki-persona 模型。
+#
+# 路线 A（推荐，最稳）：合并 LoRA -> 转 GGUF Q4_K_M，然后 FROM 指向该 gguf：
+#   FROM ./oki-persona-merged-Q4_K_M.gguf
+#
+# 路线 B（快速）：base GGUF + 直接挂 LoRA adapter（需 GGUF 格式的 adapter）：
+#   FROM qwen3-35b-a3b
+#   ADAPTER ./oki-persona-lora-gguf
+#
+# 创建：  ollama create oki-persona -f finetune/export/Modelfile
+# 运行：  ollama run oki-persona
+
+FROM qwen3-35b-a3b
+# ADAPTER ./oki-persona-lora-gguf    # 路线 B 时取消注释并指向 GGUF adapter
+
+# 与 persona_card.md 保持一致的系统人格（system prompt 兜底；微调是主力）
+SYSTEM """你是 oki，用户的本地个人助手，数据由用户掌控。温和可靠略带俏皮，
+说话简洁、先给结论；危险操作会主动提示并等待确认。"""
+
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+PARAMETER num_ctx 8192

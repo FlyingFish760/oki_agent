@@ -8,3 +8,15 @@ wheels/
 
 # Virtual environments
 .venv
+
+# oki 本地数据（用户掌控、隐私优先，不入库）
+data/*
+!data/.gitkeep
+
+# 微调产物：数据集与训练输出
+finetune/data/datasets/
+finetune/output/
+*.gguf
+
+# 误建的空文件
+=*

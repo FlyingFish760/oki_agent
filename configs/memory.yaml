@@ -1,0 +1,22 @@
+# 记忆层配置。
+
+# 结构化事实/时间戳/来源 -> SQLite
+db_path: "data/memory.db"
+# 情景记忆语义检索 -> Chroma（本地持久化目录）
+vector_dir: "data/chroma"
+
+# 检索打分权重：相关性 + 新近度 + 重要性
+retrieval:
+  w_relevance: 0.6
+  w_recency: 0.25
+  w_importance: 0.15
+  half_life_days: 30      # 时间衰减半衰期
+  top_k: 5
+
+# 遗忘：低价值 + 长期未访问的记忆淘汰
+forget:
+  importance_floor: 0.2
+  idle_days: 90
+
+# embedding（Day5 接入；可用 Ollama 的 embedding 模型）
+embedding_model: "nomic-embed-text"

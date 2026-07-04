@@ -1,0 +1,40 @@
+# QLoRA 训练配置（Qwen3.6-35B-A3B，MoE）。
+# 显存：32GB 可跑 4-bit QLoRA；扩到 48GB 更从容（更长序列/更大 batch）。
+
+base_model: "Qwen/Qwen3.6-35B-A3B"     # HF 权重（训练用 fp16/bf16，非 GGUF）
+
+# 4-bit 量化（QLoRA）
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_use_double_quant: true
+
+# LoRA —— MoE 关键：只挂注意力投影，别动 router / 专家，避免破坏专家路由稳定性。
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  # 只挂 attention 投影 q/k/v/o（可选再加共享专家的投影，但不碰 router 与路由专家）
+  target_modules: ["q_proj", "k_proj", "v_proj", "o_proj"]
+  # 显式排除，双保险
+  exclude_modules: ["gate", "router", "experts"]
+
+# 训练超参（先跑通再调质量，小步快迭代）
+train:
+  data_files:
+    - "finetune/data/datasets/persona.jsonl"
+    - "finetune/data/datasets/capability.jsonl"   # 能力保持样本
+  max_seq_len: 2048
+  per_device_batch_size: 1
+  gradient_accumulation_steps: 16
+  learning_rate: 1.0e-4
+  num_epochs: 3
+  warmup_ratio: 0.03
+  lr_scheduler: "cosine"
+  gradient_checkpointing: true
+  bf16: true
+  output_dir: "finetune/output/oki-persona-lora"
+
+# thinking 处理需与数据生成一致（strip / keep），仅作记录
+thinking: "strip"
