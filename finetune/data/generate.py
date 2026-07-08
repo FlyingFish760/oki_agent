@@ -45,10 +45,9 @@ DAILY_PERSONA_CARD = Path("finetune/persona_card-daily_en.md")
 PROMPT_TEMPLATE_NAME = "rolegpt_zero_shot_en"
 
 DATASET_MIX = [
-    ("daily_dialog", 0.35),
-    ("facebook/empathetic_dialogues", 0.30),
-    ("OpenAssistant/oasst1", 0.20),
-    ("HuggingFaceH4/ultrachat_200k", 0.15),
+    ("facebook/empathetic_dialogues", 0.40),
+    ("OpenAssistant/oasst1", 0.35),
+    ("HuggingFaceH4/ultrachat_200k", 0.25),
 ]
 
 INTENTS = [
@@ -299,21 +298,6 @@ def _load_dataset_safe(name: str, split: str, cache_dir: Path | None = None):
     return load_dataset(name, split=split, cache_dir=str(cache_dir) if cache_dir else None)
 
 
-def _iter_daily_dialog(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
-    ds = _load_dataset_safe("daily_dialog", "train", cache_dir)
-    for idx, row in enumerate(ds):
-        if idx >= max_source_rows:
-            break
-        dialog = row.get("dialog") or row.get("utterances") or []
-        if not isinstance(dialog, list):
-            continue
-        for utterance in dialog:
-            text = _clean_text(str(utterance))
-            ok, _ = _is_daily_candidate(text)
-            if ok:
-                yield SourcePrompt("daily_dialog", text)
-
-
 def _iter_empathetic_dialogues(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
     ds = _load_dataset_safe("facebook/empathetic_dialogues", "train", cache_dir)
     for idx, row in enumerate(ds):
@@ -369,7 +353,6 @@ def _collect_source_prompts(args: argparse.Namespace) -> list[SourcePrompt]:
     target = args.n_train + args.n_eval
     by_dataset: dict[str, list[SourcePrompt]] = {name: [] for name, _ in DATASET_MIX}
     loaders = {
-        "daily_dialog": _iter_daily_dialog,
         "facebook/empathetic_dialogues": _iter_empathetic_dialogues,
         "OpenAssistant/oasst1": _iter_oasst,
         "HuggingFaceH4/ultrachat_200k": _iter_ultrachat,
@@ -627,6 +610,11 @@ Outputs for daily-en:
   train:    finetune/data/datasets/daily_en_train.jsonl
   eval:     finetune/data/datasets/daily_en_eval.jsonl
   rejected: finetune/data/datasets/daily_en_rejected.jsonl
+
+Source mix for daily-en:
+  facebook/empathetic_dialogues: 40%
+  OpenAssistant/oasst1: 35%
+  HuggingFaceH4/ultrachat_200k: 25%
 
 Notes:
   - daily-en keeps source text in English; it does not translate or localize.
