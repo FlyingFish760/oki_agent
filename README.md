@@ -128,8 +128,9 @@ uv run python finetune/eval/ab_compare.py
 ```powershell
 uv sync --extra finetune
 
-# Day2 造数据（先实现 generate.py 里的 _call_teacher）
-python finetune/data/generate.py --n 500 --thinking strip --out finetune/data/datasets/persona.jsonl
+# Day2 造数据：英文日常对话数据（先用开源英文数据集抽 user intent，再用 teacher 生成 oki 回复）
+python finetune/data/generate.py --mode daily-en --dry-run-sources --n-train 10 --n-eval 5
+python finetune/data/generate.py --mode daily-en --persona-card finetune/persona_card-daily_en.md --n-train 300 --n-eval 50 --teacher openai-compatible --model <teacher-model-name>
 python finetune/data/capability_keep.py
 
 # Day3 训练（QLoRA，单卡）
