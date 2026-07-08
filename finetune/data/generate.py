@@ -291,16 +291,16 @@ def _is_daily_candidate(text: str) -> tuple[bool, str]:
     return True, "ok"
 
 
-def _load_dataset_safe(name: str, split: str):
+def _load_dataset_safe(name: str, split: str, cache_dir: Path | None = None):
     try:
         from datasets import load_dataset
     except ImportError as exc:
         raise RuntimeError("Install finetune dependencies first: uv sync --extra finetune") from exc
-    return load_dataset(name, split=split)
+    return load_dataset(name, split=split, cache_dir=str(cache_dir) if cache_dir else None)
 
 
-def _iter_daily_dialog(max_source_rows: int) -> Iterable[SourcePrompt]:
-    ds = _load_dataset_safe("daily_dialog", "train")
+def _iter_daily_dialog(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
+    ds = _load_dataset_safe("daily_dialog", "train", cache_dir)
     for idx, row in enumerate(ds):
         if idx >= max_source_rows:
             break
@@ -314,8 +314,8 @@ def _iter_daily_dialog(max_source_rows: int) -> Iterable[SourcePrompt]:
                 yield SourcePrompt("daily_dialog", text)
 
 
-def _iter_empathetic_dialogues(max_source_rows: int) -> Iterable[SourcePrompt]:
-    ds = _load_dataset_safe("facebook/empathetic_dialogues", "train")
+def _iter_empathetic_dialogues(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
+    ds = _load_dataset_safe("facebook/empathetic_dialogues", "train", cache_dir)
     for idx, row in enumerate(ds):
         if idx >= max_source_rows:
             break
@@ -330,8 +330,8 @@ def _iter_empathetic_dialogues(max_source_rows: int) -> Iterable[SourcePrompt]:
                 break
 
 
-def _iter_oasst(max_source_rows: int) -> Iterable[SourcePrompt]:
-    ds = _load_dataset_safe("OpenAssistant/oasst1", "train")
+def _iter_oasst(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
+    ds = _load_dataset_safe("OpenAssistant/oasst1", "train", cache_dir)
     for idx, row in enumerate(ds):
         if idx >= max_source_rows:
             break
@@ -345,8 +345,8 @@ def _iter_oasst(max_source_rows: int) -> Iterable[SourcePrompt]:
             yield SourcePrompt("OpenAssistant/oasst1", text)
 
 
-def _iter_ultrachat(max_source_rows: int) -> Iterable[SourcePrompt]:
-    ds = _load_dataset_safe("HuggingFaceH4/ultrachat_200k", "train_sft")
+def _iter_ultrachat(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
+    ds = _load_dataset_safe("HuggingFaceH4/ultrachat_200k", "train_sft", cache_dir)
     for idx, row in enumerate(ds):
         if idx >= max_source_rows:
             break
@@ -378,7 +378,7 @@ def _collect_source_prompts(args: argparse.Namespace) -> list[SourcePrompt]:
     for name, ratio in DATASET_MIX:
         desired = max(1, round(target * ratio * args.source_oversample))
         rows = []
-        for prompt in loaders[name](args.max_source_rows):
+        for prompt in loaders[name](args.max_source_rows, args.cache_dir):
             rows.append(prompt)
             if len(rows) >= desired:
                 break
@@ -775,6 +775,15 @@ Notes:
         type=int,
         default=20000,
         help="Maximum rows scanned per source dataset before filtering. Default: %(default)s.",
+    )
+    filtering.add_argument(
+        "--cache-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Directory used by Hugging Face datasets for downloads/cache. "
+            "If omitted, datasets uses its default cache location."
+        ),
     )
     filtering.add_argument(
         "--source-oversample",
