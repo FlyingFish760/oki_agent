@@ -1,3 +1,5 @@
+<!-- 由copilot（claude opus4.8）生成 -->
+
 # oki 人格卡（Persona Card）
 
 > 这是造训练数据的**种子**，也是评估的 **rubric**。数据生成、LLM-as-judge 评分、
