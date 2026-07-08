@@ -27,13 +27,10 @@ and does not add category labels.
 from __future__ import annotations
 
 import argparse
-import csv
-import io
 import json
 import os
 import random
 import re
-import tarfile
 import time
 import urllib.error
 import urllib.request
@@ -48,14 +45,8 @@ DAILY_PERSONA_CARD = Path("finetune/persona_card-daily_en.md")
 PROMPT_TEMPLATE_NAME = "rolegpt_zero_shot_en"
 
 DATASET_MIX = [
-    ("facebook/empathetic_dialogues", 0.40),
-    ("OpenAssistant/oasst1", 0.35),
-    ("HuggingFaceH4/ultrachat_200k", 0.25),
+    ("OpenAssistant/oasst1", 1.0),
 ]
-
-EMPATHETIC_DIALOGUES_ARCHIVE_URL = (
-    "https://dl.fbaipublicfiles.com/parlai/empatheticdialogues/empatheticdialogues.tar.gz"
-)
 
 INTENTS = [
     "闲聊",
@@ -305,63 +296,6 @@ def _load_dataset_safe(name: str, split: str, cache_dir: Path | None = None):
     return load_dataset(name, split=split, cache_dir=str(cache_dir) if cache_dir else None)
 
 
-def _download_file(url: str, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp_path = path.with_suffix(path.suffix + ".tmp")
-    try:
-        with urllib.request.urlopen(url, timeout=180) as resp, tmp_path.open("wb") as f:
-            while True:
-                chunk = resp.read(1024 * 1024)
-                if not chunk:
-                    break
-                f.write(chunk)
-        tmp_path.replace(path)
-    finally:
-        if tmp_path.exists():
-            tmp_path.unlink()
-
-
-def _iter_empathetic_dialogues_archive(split: str, cache_dir: Path | None = None) -> Iterable[dict[str, str]]:
-    cache_root = cache_dir or Path(os.getenv("HF_DATASETS_CACHE", Path.home() / ".cache" / "huggingface" / "datasets"))
-    archive_path = cache_root / "oki-agent" / "empatheticdialogues.tar.gz"
-    if not archive_path.exists():
-        _download_file(EMPATHETIC_DIALOGUES_ARCHIVE_URL, archive_path)
-
-    split_file = "valid.csv" if split == "validation" else f"{split}.csv"
-    member_name = f"empatheticdialogues/{split_file}"
-    try:
-        with tarfile.open(archive_path, "r:gz") as archive:
-            member = archive.extractfile(member_name)
-            if member is None:
-                raise FileNotFoundError(member_name)
-            with member:
-                reader = csv.DictReader(io.TextIOWrapper(member, encoding="utf-8"))
-                yield from reader
-    except (tarfile.TarError, OSError, csv.Error) as exc:
-        raise RuntimeError(f"Failed to read EmpatheticDialogues archive at {archive_path}: {exc}") from exc
-
-
-def _iter_empathetic_dialogues(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
-    try:
-        ds = _load_dataset_safe("facebook/empathetic_dialogues", "train", cache_dir)
-    except RuntimeError as exc:
-        if "Dataset scripts are no longer supported" not in str(exc):
-            raise
-        ds = _iter_empathetic_dialogues_archive("train", cache_dir)
-    for idx, row in enumerate(ds):
-        if idx >= max_source_rows:
-            break
-        candidates = [row.get("utterance"), row.get("prompt")]
-        for candidate in candidates:
-            if not candidate:
-                continue
-            text = _clean_text(str(candidate))
-            ok, _ = _is_daily_candidate(text)
-            if ok:
-                yield SourcePrompt("facebook/empathetic_dialogues", text)
-                break
-
-
 def _iter_oasst(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
     ds = _load_dataset_safe("OpenAssistant/oasst1", "train", cache_dir)
     for idx, row in enumerate(ds):
@@ -376,34 +310,11 @@ def _iter_oasst(max_source_rows: int, cache_dir: Path | None = None) -> Iterable
         if ok:
             yield SourcePrompt("OpenAssistant/oasst1", text)
 
-
-def _iter_ultrachat(max_source_rows: int, cache_dir: Path | None = None) -> Iterable[SourcePrompt]:
-    ds = _load_dataset_safe("HuggingFaceH4/ultrachat_200k", "train_sft", cache_dir)
-    for idx, row in enumerate(ds):
-        if idx >= max_source_rows:
-            break
-        text = ""
-        messages = row.get("messages")
-        if isinstance(messages, list):
-            for msg in messages:
-                if msg.get("role") in {"user", "human"}:
-                    text = str(msg.get("content", ""))
-                    break
-        if not text:
-            text = str(row.get("prompt") or row.get("instruction") or "")
-        text = _clean_text(text)
-        ok, _ = _is_daily_candidate(text)
-        if ok:
-            yield SourcePrompt("HuggingFaceH4/ultrachat_200k", text)
-
-
 def _collect_source_prompts(args: argparse.Namespace) -> list[SourcePrompt]:
     target = args.n_train + args.n_eval
     by_dataset: dict[str, list[SourcePrompt]] = {name: [] for name, _ in DATASET_MIX}
     loaders = {
-        "facebook/empathetic_dialogues": _iter_empathetic_dialogues,
         "OpenAssistant/oasst1": _iter_oasst,
-        "HuggingFaceH4/ultrachat_200k": _iter_ultrachat,
     }
 
     for name, ratio in DATASET_MIX:
@@ -660,9 +571,7 @@ Outputs for daily-en:
   rejected: finetune/data/datasets/daily_en_rejected.jsonl
 
 Source mix for daily-en:
-  facebook/empathetic_dialogues: 40%
-  OpenAssistant/oasst1: 35%
-  HuggingFaceH4/ultrachat_200k: 25%
+  OpenAssistant/oasst1: 100%
 
 Notes:
   - daily-en keeps source text in English; it does not translate or localize.

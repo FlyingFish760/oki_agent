@@ -129,7 +129,7 @@ uv run python finetune/eval/ab_compare.py
 uv sync --extra finetune
 
 # Day2 造数据：英文日常对话数据（从英文开源数据集抽 user intent，再用 teacher 生成 oki 回复）
-# 数据源：facebook/empathetic_dialogues + OpenAssistant/oasst1 + HuggingFaceH4/ultrachat_200k
+# 数据源：OpenAssistant/oasst1（先跑通单一数据集）
 python finetune/data/generate.py --mode daily-en --dry-run-sources --n-train 10 --n-eval 5
 python finetune/data/generate.py --mode daily-en --persona-card finetune/persona_card-daily_en.md --n-train 300 --n-eval 50 --teacher openai-compatible --model <teacher-model-name>
 python finetune/data/capability_keep.py
