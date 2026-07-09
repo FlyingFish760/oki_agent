@@ -1,0 +1,12 @@
+python finetune/data/generate.py `
+>>   --mode daily-en `
+>>   --cache-dir data `
+>>   --teacher openai-compatible `
+>>   --model gpt-5.4-mini-2026-03-17 `
+>>  --api-key 
+
+python finetune/data/generate.py `                                                        
+>>   --mode daily-en `                                                    
+>>   --cache-dir data `         
+>>   --teacher gemini `
+>>   --model gemini-3.1-flash-lite

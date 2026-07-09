@@ -65,6 +65,17 @@ python finetune/data/generate.py `
   --model <ollama-model-name>
 ```
 
+Generate with Gemini API:
+
+```powershell
+$env:GEMINI_API_KEY = "<your-gemini-api-key>"
+python finetune/data/generate.py `
+  --mode daily-en `
+  --cache-dir data/hf_cache `
+  --teacher gemini `
+  --model gemini-2.0-flash
+```
+
 ## Outputs
 
 Default `daily-en` outputs:
@@ -151,12 +162,14 @@ Rejected records are written to `daily_en_rejected.jsonl` with a `reason` field.
 - `--cache-dir`: Hugging Face dataset download/cache directory.
 - `--dry-run-sources`: sample and filter source prompts only; no teacher call.
 - `--source-preview-out`: output path for dry-run source preview JSONL.
-- `--teacher`: `openai-compatible` or `ollama`.
+- `--teacher`: `openai-compatible`, `gemini`, or `ollama`.
 - `--model`: teacher model name.
 - `--base-url`: override teacher API base URL.
-- `--api-key`: explicit OpenAI-compatible API key; otherwise `OPENAI_API_KEY`.
+- `--api-key`: explicit OpenAI-compatible or Gemini API key; otherwise
+  `OPENAI_API_KEY` or `GEMINI_API_KEY` is used based on `--teacher`.
 - `--no-json-response-format`: disable OpenAI `response_format` for compatible
-  servers that do not support it.
+  servers that do not support it. For Gemini, this disables
+  `generationConfig.response_mime_type`.
 - `--max-source-rows`: maximum OASST rows scanned before filtering.
 - `--max-assistant-words`: verbosity guard for teacher replies.
 

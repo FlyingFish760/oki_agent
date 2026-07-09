@@ -239,11 +239,40 @@ def _call_ollama(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None
     return _parse_strict_json(content)
 
 
+def _call_gemini(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None:
+    api_key = args.api_key or os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is required for --teacher gemini")
+
+    model = args.model if args.model.startswith("models/") else f"models/{args.model}"
+    payload: dict[str, Any] = {
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": prompt}],
+            }
+        ],
+        "generationConfig": {
+            "temperature": args.temperature,
+            "topP": args.top_p,
+        },
+    }
+    if args.json_response_format:
+        payload["generationConfig"]["response_mime_type"] = "application/json"
+
+    data = _post_json(f"{args.base_url.rstrip('/')}/{model}:generateContent?key={api_key}", payload)
+    parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+    content = "".join(str(part.get("text", "")) for part in parts)
+    return _parse_strict_json(content)
+
+
 def _call_teacher(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None:
     if args.teacher == "openai-compatible":
         return _call_openai_compatible(prompt, args)
     if args.teacher == "ollama":
         return _call_ollama(prompt, args)
+    if args.teacher == "gemini":
+        return _call_gemini(prompt, args)
     raise ValueError(f"unknown teacher: {args.teacher}")
 
 
@@ -559,10 +588,13 @@ def parse_args() -> argparse.Namespace:
   2) Generate the default 300 train / 50 eval daily English dataset with an OpenAI-compatible teacher:
      python finetune/data/generate.py --mode daily-en --persona-card finetune/persona_card-daily_en.md --teacher openai-compatible --model <teacher-model-name>
 
-  3) Generate with a local Ollama teacher:
+  3) Generate with Gemini API:
+     python finetune/data/generate.py --mode daily-en --teacher gemini --model gemini-2.0-flash
+
+  4) Generate with a local Ollama teacher:
      python finetune/data/generate.py --mode daily-en --teacher ollama --model <ollama-model-name>
 
-  4) Legacy persona generator entrypoint, kept for the original skeleton:
+  5) Legacy persona generator entrypoint, kept for the original skeleton:
      python finetune/data/generate.py --mode persona --n 500 --thinking strip
 
 Outputs for daily-en:
@@ -658,7 +690,7 @@ Notes:
     teacher = parser.add_argument_group("teacher backend")
     teacher.add_argument(
         "--teacher",
-        choices=["openai-compatible", "ollama"],
+        choices=["openai-compatible", "gemini", "ollama"],
         default="openai-compatible",
         help="Teacher backend used to generate assistant replies. Default: %(default)s.",
     )
@@ -671,14 +703,18 @@ Notes:
         "--base-url",
         default="",
         help=(
-            "Teacher API base URL. Defaults to https://api.openai.com/v1 for openai-compatible "
+            "Teacher API base URL. Defaults to https://api.openai.com/v1 for openai-compatible, "
+            "https://generativelanguage.googleapis.com/v1beta for gemini, "
             "and http://127.0.0.1:11434 for ollama."
         ),
     )
     teacher.add_argument(
         "--api-key",
         default="",
-        help="API key for openai-compatible teacher. If omitted, OPENAI_API_KEY is used.",
+        help=(
+            "API key for openai-compatible or gemini teacher. If omitted, "
+            "OPENAI_API_KEY or GEMINI_API_KEY is used based on --teacher."
+        ),
     )
     teacher.add_argument(
         "--json-response-format",
@@ -762,11 +798,12 @@ Notes:
         if not args.model and not args.dry_run_sources:
             raise ValueError("--model is required for --mode daily-en")
         if not args.base_url:
-            args.base_url = (
-                "https://api.openai.com/v1"
-                if args.teacher == "openai-compatible"
-                else "http://127.0.0.1:11434"
-            )
+            if args.teacher == "openai-compatible":
+                args.base_url = "https://api.openai.com/v1"
+            elif args.teacher == "gemini":
+                args.base_url = "https://generativelanguage.googleapis.com/v1beta"
+            else:
+                args.base_url = "http://127.0.0.1:11434"
     return args
 
 

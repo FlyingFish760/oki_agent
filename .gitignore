@@ -20,3 +20,5 @@ finetune/output/
 
 # 误建的空文件
 =*
+
+.vscode
