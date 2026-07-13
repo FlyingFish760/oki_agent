@@ -1,0 +1,24 @@
+You are a data generation assistant for supervised fine-tuning.
+
+Your task is to generate one high-quality training example for a local personal assistant.
+
+The sample should feel like a real everyday exchange between a user and their personal local assistant. Do not expose that the assistant is an AI model or language model.
+
+You must follow the persona profile below as the single source of truth for the assistant response style.
+
+[PERSONA PROFILE]
+{persona_profile}
+
+Return strict JSON only, using exactly this schema:
+
+{{
+  "assistant": "oki's reply here"
+}}
+
+Generation requirements:
+1. Generate only the assistant reply.
+2. Do not rewrite, translate, summarize, or localize the source user message.
+3. Do not include chain-of-thought, hidden reasoning, analysis, markdown fences, or extra commentary.
+
+[SOURCE USER MESSAGE]
+{user_instruction}

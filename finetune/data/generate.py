@@ -6,20 +6,20 @@ This script has two modes:
 
     python finetune/data/generate.py --mode persona --n 500
 
-2. English daily-conversation mode, based on open-source English datasets and a
-   RoleGPT-style teacher prompt:
+2. English instruction mode, based on open-source English datasets and a
+   standalone teacher prompt template:
 
     python finetune/data/generate.py \
-        --persona-card finetune/persona_card-daily_en.md \
-        --mode daily-en \
+        --persona-profile finetune/data/persona_profile-v2.1-en.md \
+        --mode instruction-en \
         --n-train 300 \
         --n-eval 50 \
-        --teacher openai-compatible \
+        --teacher openai \
         --model <teacher-model-name> \
-        --out finetune/data/datasets/daily_en_train.jsonl \
-        --eval-out finetune/data/datasets/daily_en_eval.jsonl
+        --out finetune/data/datasets/instruction_en_train.jsonl \
+        --eval-out finetune/data/datasets/instruction_en_eval.jsonl
 
-The daily-en mode uses datasets only as sources of English user intent. It does
+The instruction-en mode uses datasets only as sources of English user intent. It does
 not train on original assistant answers, does not translate, does not localize,
 and does not add category labels.
 """
@@ -39,10 +39,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-PERSONA_CARD = Path(__file__).resolve().parent.parent / "persona_card-v2.0.md"
-DAILY_PERSONA_CARD = Path("finetune/persona_card-daily_en.md")
-
-PROMPT_TEMPLATE_NAME = "rolegpt_zero_shot_en"
+LEGACY_PERSONA_CARD = Path(__file__).resolve().parent.parent / "persona_card-v2.0.md"
+INSTRUCTION_PERSONA_PROFILE = Path("finetune/data/persona_profile-v2.1-en.md")
+TEACHER_PROMPT_TEMPLATE = Path("finetune/data/templates/teacher_prompt_template.txt")
 
 DATASET_MIX = [
     ("OpenAssistant/oasst1", 1.0),
@@ -67,25 +66,6 @@ LEGACY_GEN_SYSTEM = """你在为一个名叫 oki 的本地助手生成人格训�
 本条对话的意图：{intent}
 """
 
-ROLEGPT_TEMPLATE = """System Instruction:
-
-You are {role_name}, your description is: {role_description_and_catchphrases}. Now please answer some questions to accurately show your personality traits! Your speaking style should fully imitate the personality role assigned to you! Please do not expose that you are an artificial intelligence model or a language model, you must always remember that you are only assigned one personality role. Don't be verbose or too formal or polite when speaking.
-
-Return strict JSON only, with this exact schema:
-{{
-  "messages": [
-    {{"role": "user", "content": "..."}},
-    {{"role": "assistant", "content": "..."}}
-  ]
-}}
-
-The user message content must exactly match the User Prompt below. Do not include markdown, code fences, commentary, or thinking traces.
-
-User Prompt:
-
-{user_name}: `{user_instruction}`
-"""
-
 BAD_ASSISTANT_PATTERNS = [
     "as an ai language model",
     "as a language model",
@@ -96,21 +76,6 @@ BAD_ASSISTANT_PATTERNS = [
     "happy to help",
     "feel free to contact me",
     "please don't hesitate",
-]
-
-CODE_HEAVY_PATTERNS = [
-    "write code",
-    "python",
-    "javascript",
-    "java ",
-    "c++",
-    "sql",
-    "regex",
-    "debug",
-    "stack trace",
-    "function",
-    "class ",
-    "algorithm",
 ]
 
 UNSAFE_PATTERNS = [
@@ -128,25 +93,20 @@ UNSAFE_PATTERNS = [
     "token",
 ]
 
-LONG_FACTUAL_PATTERNS = [
-    "explain in detail",
-    "write an essay",
-    "research paper",
-    "comprehensive",
-    "step-by-step proof",
-    "derive",
-    "summarize the following article",
-]
-
-
 @dataclass(frozen=True)
 class SourcePrompt:
     source_dataset: str
     text: str
 
 
+@dataclass(frozen=True)
+class TeacherPrompt:
+    system: str
+    user: str
+
+
 @dataclass
-class DailyStats:
+class GenerationStats:
     accepted_train: int = 0
     accepted_eval: int = 0
     rejected: int = 0
@@ -200,36 +160,65 @@ def _post_json(url: str, payload: dict[str, Any], headers: dict[str, str] | None
         headers={"Content-Type": "application/json", **(headers or {})},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=180) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=180) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        error_body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"HTTP {exc.code} {exc.reason}: {error_body}") from exc
 
 
-def _call_openai_compatible(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None:
+def _extract_openai_response_text(data: dict[str, Any]) -> str:
+    output_text = data.get("output_text")
+    if isinstance(output_text, str):
+        return output_text
+
+    chunks: list[str] = []
+    for item in data.get("output", []):
+        if not isinstance(item, dict):
+            continue
+        for content in item.get("content", []):
+            if not isinstance(content, dict):
+                continue
+            if isinstance(content.get("text"), str):
+                chunks.append(content["text"])
+    return "".join(chunks)
+
+
+def _openai_input_text(prompt: TeacherPrompt) -> str:
+    return f"{prompt.user}\n\nReturn JSON only."
+
+
+def _call_openai(prompt: TeacherPrompt, args: argparse.Namespace) -> dict[str, Any] | None:
     api_key = args.api_key or os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise RuntimeError("OPENAI_API_KEY is required for --teacher openai-compatible")
+        raise RuntimeError("OPENAI_API_KEY is required for --teacher openai")
 
     payload = {
         "model": args.model,
-        "messages": [{"role": "user", "content": prompt}],
+        "instructions": prompt.system,
+        "input": _openai_input_text(prompt),
         "temperature": args.temperature,
         "top_p": args.top_p,
     }
     if args.json_response_format:
-        payload["response_format"] = {"type": "json_object"}
+        payload["text"] = {"format": {"type": "json_object"}}
     data = _post_json(
-        f"{args.base_url.rstrip('/')}/chat/completions",
+        f"{args.base_url.rstrip('/')}/responses",
         payload,
         headers={"Authorization": f"Bearer {api_key}"},
     )
-    content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+    content = _extract_openai_response_text(data)
     return _parse_strict_json(content)
 
 
-def _call_ollama(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None:
+def _call_ollama(prompt: TeacherPrompt, args: argparse.Namespace) -> dict[str, Any] | None:
     payload = {
         "model": args.model,
-        "messages": [{"role": "user", "content": prompt}],
+        "messages": [
+            {"role": "system", "content": prompt.system},
+            {"role": "user", "content": prompt.user},
+        ],
         "stream": False,
         "format": "json",
         "options": {"temperature": args.temperature, "top_p": args.top_p},
@@ -239,17 +228,20 @@ def _call_ollama(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None
     return _parse_strict_json(content)
 
 
-def _call_gemini(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None:
+def _call_gemini(prompt: TeacherPrompt, args: argparse.Namespace) -> dict[str, Any] | None:
     api_key = args.api_key or os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is required for --teacher gemini")
 
     model = args.model if args.model.startswith("models/") else f"models/{args.model}"
     payload: dict[str, Any] = {
+        "systemInstruction": {
+            "parts": [{"text": prompt.system}],
+        },
         "contents": [
             {
                 "role": "user",
-                "parts": [{"text": prompt}],
+                "parts": [{"text": prompt.user}],
             }
         ],
         "generationConfig": {
@@ -266,9 +258,9 @@ def _call_gemini(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None
     return _parse_strict_json(content)
 
 
-def _call_teacher(prompt: str, args: argparse.Namespace) -> dict[str, Any] | None:
-    if args.teacher == "openai-compatible":
-        return _call_openai_compatible(prompt, args)
+def _call_teacher(prompt: TeacherPrompt, args: argparse.Namespace) -> dict[str, Any] | None:
+    if args.teacher == "openai":
+        return _call_openai(prompt, args)
     if args.teacher == "ollama":
         return _call_ollama(prompt, args)
     if args.teacher == "gemini":
@@ -295,7 +287,7 @@ def _is_mostly_english(text: str) -> bool:
     return ascii_letters / letters >= 0.85
 
 
-def _is_daily_candidate(text: str) -> tuple[bool, str]:
+def _is_source_candidate(text: str) -> tuple[bool, str]:
     text = _clean_text(text)
     words = re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)?", text)
     if len(words) < 8:
@@ -306,12 +298,8 @@ def _is_daily_candidate(text: str) -> tuple[bool, str]:
         return False, "not_english"
 
     low = text.lower()
-    if any(pattern in low for pattern in CODE_HEAVY_PATTERNS):
-        return False, "code_heavy"
     if any(pattern in low for pattern in UNSAFE_PATTERNS):
         return False, "unsafe_or_sensitive"
-    if any(pattern in low for pattern in LONG_FACTUAL_PATTERNS):
-        return False, "long_factual"
     if "http://" in low or "https://" in low:
         return False, "contains_url"
     return True, "ok"
@@ -335,7 +323,7 @@ def _iter_oasst(max_source_rows: int, cache_dir: Path | None = None) -> Iterable
         if row.get("role") != "prompter":
             continue
         text = _clean_text(str(row.get("text", "")))
-        ok, _ = _is_daily_candidate(text)
+        ok, _ = _is_source_candidate(text)
         if ok:
             yield SourcePrompt("OpenAssistant/oasst1", text)
 
@@ -389,46 +377,40 @@ def _collect_source_prompts(args: argparse.Namespace) -> list[SourcePrompt]:
     return selected
 
 
-def _role_description_from_card(card: str, max_chars: int) -> str:
-    card = re.sub(r"<!--.*?-->", "", card, flags=re.DOTALL)
-    lines = []
-    for raw_line in card.splitlines():
-        line = raw_line.strip()
-        if not line or line == "---":
-            continue
-        if line.startswith("#"):
-            continue
-        line = re.sub(r"^\s*[-*]\s*", "", line)
-        line = re.sub(r"^\d+\.\s*", "", line)
-        lines.append(line)
-    description = " ".join(lines)
-    description = re.sub(r"\s+", " ", description).strip()
-    if len(description) <= max_chars:
-        return description
-    return description[:max_chars].rsplit(" ", 1)[0].strip()
+def _persona_profile_for_prompt(profile: str, max_chars: int) -> str:
+    profile = re.sub(r"<!--.*?-->", "", profile, flags=re.DOTALL)
+    profile = re.sub(r"\n{3,}", "\n\n", profile).strip()
+    if len(profile) <= max_chars:
+        return profile
+    return profile[:max_chars].rsplit(" ", 1)[0].strip()
 
 
-def _build_rolegpt_prompt(role_description: str, user_instruction: str) -> str:
-    return ROLEGPT_TEMPLATE.format(
-        role_name="oki",
-        role_description_and_catchphrases=role_description,
-        user_name="User",
+def _prompt_template_name(path: Path) -> str:
+    return path.stem
+
+
+def _build_teacher_prompt(template: str, persona_profile: str, user_instruction: str) -> TeacherPrompt:
+    rendered = template.format(
+        persona_profile=persona_profile,
         user_instruction=user_instruction,
     )
+    marker = "[SOURCE USER MESSAGE]"
+    if marker not in rendered:
+        raise ValueError(f"Prompt template must contain {marker} to split system and user prompts.")
+
+    system_prompt, user_prompt = rendered.split(marker, 1)
+    user_prompt = _clean_text(user_prompt)
+    if not system_prompt.strip() or not user_prompt:
+        raise ValueError(f"Prompt template must include non-empty system and user sections around {marker}.")
+    return TeacherPrompt(system=system_prompt.strip(), user=user_prompt)
 
 
-def _validate_daily_sample(sample: dict[str, Any], expected_user: str, max_assistant_words: int) -> tuple[bool, str]:
-    messages = sample.get("messages")
-    if not isinstance(messages, list) or len(messages) != 2:
-        return False, "messages_must_have_two_turns"
-    if messages[0].get("role") != "user" or messages[1].get("role") != "assistant":
-        return False, "bad_role_order"
+def _assistant_from_teacher_sample(sample: dict[str, Any]) -> str:
+    assistant = sample.get("assistant")
+    return _clean_text(str(assistant)) if isinstance(assistant, str) else ""
 
-    user = _clean_text(str(messages[0].get("content", "")))
-    assistant = _clean_text(str(messages[1].get("content", "")))
-    expected = _clean_text(expected_user)
-    if user != expected:
-        return False, "user_content_changed"
+
+def _validate_assistant(assistant: str, max_assistant_words: int) -> tuple[bool, str]:
     if not assistant:
         return False, "empty_assistant"
     if "<think>" in assistant.lower() or "</think>" in assistant.lower():
@@ -444,33 +426,45 @@ def _validate_daily_sample(sample: dict[str, Any], expected_user: str, max_assis
     return True, "ok"
 
 
-def _daily_record(record_id: int, source: SourcePrompt, sample: dict[str, Any], persona_card: Path) -> dict[str, Any]:
+def _sft_record(
+    record_id: int,
+    source: SourcePrompt,
+    assistant: str,
+    persona_profile: Path,
+    prompt_template: Path,
+) -> dict[str, Any]:
     return {
-        "id": f"daily_en_{record_id:06d}",
+        "id": f"instruction_en_{record_id:06d}",
         "source_dataset": source.source_dataset,
-        "persona_card": persona_card.name,
-        "prompt_template": PROMPT_TEMPLATE_NAME,
-        "messages": sample["messages"],
+        "persona_profile": persona_profile.name,
+        "prompt_template": _prompt_template_name(prompt_template),
+        "messages": [
+            {"role": "user", "content": source.text},
+            {"role": "assistant", "content": assistant},
+        ],
     }
 
 
-def run_daily_en(args: argparse.Namespace) -> None:
-    if not args.persona_card.exists():
+def run_instruction_en(args: argparse.Namespace) -> None:
+    if not args.persona_profile.exists():
         raise FileNotFoundError(
-            f"Daily persona card not found: {args.persona_card}. "
-            "Create finetune/persona_card-daily_en.md before running daily-en generation."
+            f"Persona profile not found: {args.persona_profile}. "
+            "Create or pass an English persona profile before running instruction-en generation."
         )
+    if not args.prompt_template.exists():
+        raise FileNotFoundError(f"Prompt template not found: {args.prompt_template}")
     random.seed(args.seed)
 
-    card = args.persona_card.read_text(encoding="utf-8")
-    role_description = _role_description_from_card(card, args.role_description_max_chars)
+    profile = args.persona_profile.read_text(encoding="utf-8")
+    persona_profile = _persona_profile_for_prompt(profile, args.persona_profile_max_chars)
+    prompt_template = args.prompt_template.read_text(encoding="utf-8")
     sources = _collect_source_prompts(args)
     random.shuffle(sources)
 
     if args.dry_run_sources:
         preview_rows = (
             {
-                "id": f"daily_en_source_{idx:06d}",
+                "id": f"instruction_en_source_{idx:06d}",
                 "source_dataset": source.source_dataset,
                 "user_instruction": source.text,
             }
@@ -487,7 +481,7 @@ def run_daily_en(args: argparse.Namespace) -> None:
     args.eval_out.write_text("", encoding="utf-8")
     args.rejected_out.write_text("", encoding="utf-8")
 
-    stats = DailyStats()
+    stats = GenerationStats()
     record_id = 1
     max_attempts = min(len(sources), (args.n_train + args.n_eval) * args.max_attempts_multiplier)
     for source in sources[:max_attempts]:
@@ -495,7 +489,7 @@ def run_daily_en(args: argparse.Namespace) -> None:
         if stats.accepted_train >= args.n_train and stats.accepted_eval >= args.n_eval:
             break
 
-        prompt = _build_rolegpt_prompt(role_description, source.text)
+        prompt = _build_teacher_prompt(prompt_template, persona_profile, source.text)
         try:
             sample = _call_teacher(prompt, args)
         except (RuntimeError, urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
@@ -524,7 +518,8 @@ def run_daily_en(args: argparse.Namespace) -> None:
             )
             continue
 
-        ok, reason = _validate_daily_sample(sample, source.text, args.max_assistant_words)
+        assistant = _assistant_from_teacher_sample(sample)
+        ok, reason = _validate_assistant(assistant, args.max_assistant_words)
         if not ok:
             stats.rejected += 1
             _append_jsonl(
@@ -538,7 +533,7 @@ def run_daily_en(args: argparse.Namespace) -> None:
             )
             continue
 
-        record = _daily_record(record_id, source, sample, args.persona_card)
+        record = _sft_record(record_id, source, assistant, args.persona_profile, args.prompt_template)
         _append_jsonl(target_path, record)
         record_id += 1
         if target_path == args.out:
@@ -547,7 +542,7 @@ def run_daily_en(args: argparse.Namespace) -> None:
             stats.accepted_eval += 1
 
     print(
-        "daily-en generation complete: "
+        "instruction-en generation complete: "
         f"train={stats.accepted_train}/{args.n_train} "
         f"eval={stats.accepted_eval}/{args.n_eval} "
         f"rejected={stats.rejected} teacher_failed={stats.teacher_failed} "
@@ -558,7 +553,7 @@ def run_daily_en(args: argparse.Namespace) -> None:
 
 
 def run_legacy_persona(args: argparse.Namespace) -> None:
-    card = PERSONA_CARD.read_text(encoding="utf-8")
+    card = LEGACY_PERSONA_CARD.read_text(encoding="utf-8")
     args.out.parent.mkdir(parents=True, exist_ok=True)
 
     written = 0
@@ -578,45 +573,45 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Generate SFT JSONL data for oki. The recommended Day2 path is "
-            "`--mode daily-en`: sample English user prompts from open-source datasets, "
-            "then use a teacher model plus the daily persona card to generate oki replies."
+            "`--mode instruction-en`: sample English user prompts from open-source datasets, "
+            "then use a teacher model plus the persona profile to generate oki replies."
         ),
         epilog="""Examples:
   1) Preview English source prompts only, without calling a teacher:
-     python finetune/data/generate.py --mode daily-en --dry-run-sources --n-train 10 --n-eval 5
+     python finetune/data/generate.py --mode instruction-en --dry-run-sources --n-train 10 --n-eval 5
 
-  2) Generate the default 300 train / 50 eval daily English dataset with an OpenAI-compatible teacher:
-     python finetune/data/generate.py --mode daily-en --persona-card finetune/persona_card-daily_en.md --teacher openai-compatible --model <teacher-model-name>
+  2) Generate the default 300 train / 50 eval English instruction dataset with the official OpenAI Responses API:
+     python finetune/data/generate.py --mode instruction-en --persona-profile finetune/data/persona_profile-v2.1-en.md --prompt-template finetune/data/templates/teacher_prompt_template.txt --teacher openai --model <teacher-model-name>
 
   3) Generate with Gemini API:
-     python finetune/data/generate.py --mode daily-en --teacher gemini --model gemini-2.0-flash
+     python finetune/data/generate.py --mode instruction-en --teacher gemini --model gemini-2.0-flash
 
   4) Generate with a local Ollama teacher:
-     python finetune/data/generate.py --mode daily-en --teacher ollama --model <ollama-model-name>
+     python finetune/data/generate.py --mode instruction-en --teacher ollama --model <ollama-model-name>
 
   5) Legacy persona generator entrypoint, kept for the original skeleton:
      python finetune/data/generate.py --mode persona --n 500 --thinking strip
 
-Outputs for daily-en:
-  train:    finetune/data/datasets/daily_en_train.jsonl
-  eval:     finetune/data/datasets/daily_en_eval.jsonl
-  rejected: finetune/data/datasets/daily_en_rejected.jsonl
+Outputs for instruction-en:
+  train:    finetune/data/datasets/instruction_en_train.jsonl
+  eval:     finetune/data/datasets/instruction_en_eval.jsonl
+  rejected: finetune/data/datasets/instruction_en_rejected.jsonl
 
-Source mix for daily-en:
+Source mix for instruction-en:
   OpenAssistant/oasst1: 100%
 
 Notes:
-  - daily-en keeps source text in English; it does not translate or localize.
+  - instruction-en keeps source text in English; it does not translate or localize.
   - Source datasets provide only user intent/context. Original assistant answers are not used.
-  - The teacher must return strict JSON with a two-message user/assistant conversation.
+  - The teacher must return strict JSON with an assistant reply; generate.py builds the final messages.
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--mode",
-        choices=["persona", "daily-en"],
+        choices=["persona", "instruction-en"],
         default="persona",
-        help="Generation mode. Use daily-en for the current English daily conversation pipeline. Default: %(default)s.",
+        help="Generation mode. Use instruction-en for the current English instruction pipeline. Default: %(default)s.",
     )
 
     # Legacy persona mode.
@@ -634,76 +629,86 @@ Notes:
         help="How to handle assistant <think> traces in legacy persona mode. Default: %(default)s.",
     )
 
-    # Daily English mode.
-    daily = parser.add_argument_group("daily-en data settings")
-    daily.add_argument(
-        "--persona-card",
+    # English instruction mode.
+    instruction = parser.add_argument_group("instruction-en data settings")
+    instruction.add_argument(
+        "--persona-profile",
         type=Path,
-        default=DAILY_PERSONA_CARD,
-        help="Daily conversation persona card used to build the RoleGPT role description. Default: %(default)s.",
+        default=INSTRUCTION_PERSONA_PROFILE,
+        help="English persona profile inserted into the prompt template. Default: %(default)s.",
     )
-    daily.add_argument(
+    instruction.add_argument(
+        "--prompt-template",
+        type=Path,
+        default=TEACHER_PROMPT_TEMPLATE,
+        help=(
+            "Prompt template file for instruction-en generation. It must contain "
+            "{persona_profile}, {user_instruction}, and [SOURCE USER MESSAGE]. "
+            "Default: %(default)s."
+        ),
+    )
+    instruction.add_argument(
         "--n-train",
         type=int,
         default=300,
-        help="Accepted training samples to write in daily-en mode. Default: %(default)s.",
+        help="Accepted training samples to write in instruction-en mode. Default: %(default)s.",
     )
-    daily.add_argument(
+    instruction.add_argument(
         "--n-eval",
         type=int,
         default=50,
-        help="Accepted held-out evaluation samples to write in daily-en mode. Default: %(default)s.",
+        help="Accepted held-out evaluation samples to write in instruction-en mode. Default: %(default)s.",
     )
-    daily.add_argument(
+    instruction.add_argument(
         "--out",
         type=Path,
         default=Path("finetune/data/datasets/persona.jsonl"),
         help=(
-            "Training JSONL output path. In daily-en mode, the default is remapped to "
-            "finetune/data/datasets/daily_en_train.jsonl."
+            "Training JSONL output path. In instruction-en mode, the default is remapped to "
+            "finetune/data/datasets/instruction_en_train.jsonl."
         ),
     )
-    daily.add_argument(
+    instruction.add_argument(
         "--eval-out",
         type=Path,
-        default=Path("finetune/data/datasets/daily_en_eval.jsonl"),
+        default=Path("finetune/data/datasets/instruction_en_eval.jsonl"),
         help="Held-out evaluation JSONL output path. Default: %(default)s.",
     )
-    daily.add_argument(
+    instruction.add_argument(
         "--rejected-out",
         type=Path,
-        default=Path("finetune/data/datasets/daily_en_rejected.jsonl"),
+        default=Path("finetune/data/datasets/instruction_en_rejected.jsonl"),
         help="Rejected/failed generation records JSONL path. Default: %(default)s.",
     )
-    daily.add_argument(
+    instruction.add_argument(
         "--dry-run-sources",
         action="store_true",
         help="Only sample and filter source prompts; do not call the teacher or write train/eval files.",
     )
-    daily.add_argument(
+    instruction.add_argument(
         "--source-preview-out",
         type=Path,
-        default=Path("finetune/data/datasets/daily_en_source_preview.jsonl"),
+        default=Path("finetune/data/datasets/instruction_en_source_preview.jsonl"),
         help="JSONL output for --dry-run-sources preview prompts. Default: %(default)s.",
     )
 
     teacher = parser.add_argument_group("teacher backend")
     teacher.add_argument(
         "--teacher",
-        choices=["openai-compatible", "gemini", "ollama"],
-        default="openai-compatible",
+        choices=["openai", "gemini", "ollama"],
+        default="openai",
         help="Teacher backend used to generate assistant replies. Default: %(default)s.",
     )
     teacher.add_argument(
         "--model",
         default="",
-        help="Teacher model name. Required in daily-en mode unless --dry-run-sources is set.",
+        help="Teacher model name. Required in instruction-en mode unless --dry-run-sources is set.",
     )
     teacher.add_argument(
         "--base-url",
         default="",
         help=(
-            "Teacher API base URL. Defaults to https://api.openai.com/v1 for openai-compatible, "
+            "Teacher API base URL. Defaults to https://api.openai.com/v1 for openai, "
             "https://generativelanguage.googleapis.com/v1beta for gemini, "
             "and http://127.0.0.1:11434 for ollama."
         ),
@@ -712,7 +717,7 @@ Notes:
         "--api-key",
         default="",
         help=(
-            "API key for openai-compatible or gemini teacher. If omitted, "
+            "API key for openai or gemini teacher. If omitted, "
             "OPENAI_API_KEY or GEMINI_API_KEY is used based on --teacher."
         ),
     )
@@ -721,8 +726,8 @@ Notes:
         action=argparse.BooleanOptionalAction,
         default=True,
         help=(
-            "Send OpenAI-compatible response_format={type: json_object}. Use "
-            "--no-json-response-format for compatible servers that do not support it. Default: %(default)s."
+            "Request JSON output from OpenAI Responses API or Gemini. Use "
+            "--no-json-response-format for models/endpoints that do not support it. Default: %(default)s."
         ),
     )
     teacher.add_argument(
@@ -785,20 +790,20 @@ Notes:
         help="Reject teacher replies longer than this many English words. Default: %(default)s.",
     )
     filtering.add_argument(
-        "--role-description-max-chars",
+        "--persona-profile-max-chars",
         type=int,
         default=3500,
-        help="Maximum characters from the persona card inserted into the RoleGPT prompt. Default: %(default)s.",
+        help="Maximum characters from the persona profile inserted into the prompt template. Default: %(default)s.",
     )
     args = parser.parse_args()
 
-    if args.mode == "daily-en":
+    if args.mode == "instruction-en":
         if args.out == Path("finetune/data/datasets/persona.jsonl"):
-            args.out = Path("finetune/data/datasets/daily_en_train.jsonl")
+            args.out = Path("finetune/data/datasets/instruction_en_train.jsonl")
         if not args.model and not args.dry_run_sources:
-            raise ValueError("--model is required for --mode daily-en")
+            raise ValueError("--model is required for --mode instruction-en")
         if not args.base_url:
-            if args.teacher == "openai-compatible":
+            if args.teacher == "openai":
                 args.base_url = "https://api.openai.com/v1"
             elif args.teacher == "gemini":
                 args.base_url = "https://generativelanguage.googleapis.com/v1beta"
@@ -809,8 +814,8 @@ Notes:
 
 def main() -> None:
     args = parse_args()
-    if args.mode == "daily-en":
-        run_daily_en(args)
+    if args.mode == "instruction-en":
+        run_instruction_en(args)
     else:
         run_legacy_persona(args)
 
