@@ -1,12 +1,7 @@
 设定api key：
 $env:GEMINI_API_KEY="你的_API_KEY"
 
-python finetune/data/generate.py `
->>   --mode daily-en `
->>   --cache-dir data `
->>   --teacher openai-compatible `
->>   --model gpt-5.4-mini-2026-03-17 `
->>  --api-key 
+python finetune/data/generate.py --mode instruction-en --teacher openai --model gpt-5.4-mini-2026-03-17 --person-profile finetune\data\persona_profile-v2.1-en.md --n-train 1000 --n-eval 200
 
 python finetune/data/generate.py `                                                        
 >>   --mode daily-en `                                                    

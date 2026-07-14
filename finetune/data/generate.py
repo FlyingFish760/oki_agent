@@ -432,12 +432,14 @@ def _sft_record(
     assistant: str,
     persona_profile: Path,
     prompt_template: Path,
+    teacher_model: str,
 ) -> dict[str, Any]:
     return {
         "id": f"instruction_en_{record_id:06d}",
         "source_dataset": source.source_dataset,
         "persona_profile": persona_profile.name,
         "prompt_template": _prompt_template_name(prompt_template),
+        "teacher_model": teacher_model,
         "messages": [
             {"role": "user", "content": source.text},
             {"role": "assistant", "content": assistant},
@@ -533,7 +535,14 @@ def run_instruction_en(args: argparse.Namespace) -> None:
             )
             continue
 
-        record = _sft_record(record_id, source, assistant, args.persona_profile, args.prompt_template)
+        record = _sft_record(
+            record_id,
+            source,
+            assistant,
+            args.persona_profile,
+            args.prompt_template,
+            args.model,
+        )
         _append_jsonl(target_path, record)
         record_id += 1
         if target_path == args.out:

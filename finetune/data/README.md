@@ -103,6 +103,7 @@ Accepted train/eval records look like:
   "source_dataset": "OpenAssistant/oasst1",
   "persona_profile": "persona_profile-v2.1-en.md",
   "prompt_template": "teacher_prompt_template",
+  "teacher_model": "gpt-4.1-mini",
   "messages": [
     {"role": "user", "content": "I'm so tired today."},
     {"role": "assistant", "content": "Rough day. Take ten minutes first, don't force it."}
