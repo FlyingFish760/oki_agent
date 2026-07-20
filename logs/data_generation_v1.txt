@@ -1,0 +1,3 @@
+python finetune/data/generate.py --mode instruction-en --teacher gemini --model gemini-3.1-flash-lite --persona-profile finetune\data\persona_profile-v2.1-en.md --n-train 1000 --n-eval 200
+
+instruction-en generation complete: train=1000/1000 eval=200/200 rejected=19 teacher_failed=18 out=finetune\data\datasets\instruction_en_train.jsonl eval_out=finetune\data\datasets\instruction_en_eval.jsonl rejected_out=finetune\data\datasets\instruction_en_rejected.jsonl
