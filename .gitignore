@@ -22,3 +22,6 @@ finetune/output/
 =*
 
 .vscode
+
+# wheel文件
+*.whl

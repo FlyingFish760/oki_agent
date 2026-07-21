@@ -1,0 +1,560 @@
+Qwen3_5MoeForConditionalGeneration(
+  (model): Qwen3_5MoeModel(
+    (visual): Qwen3_5MoeVisionModel(
+      (patch_embed): Qwen3_5MoeVisionPatchEmbed(
+        (proj): Conv3d(3, 1152, kernel_size=(2, 16, 16), stride=(2, 16, 16))
+      )
+      (pos_embed): Embedding(2304, 1152)
+      (rotary_pos_emb): Qwen3_5MoeVisionRotaryEmbedding()
+      (blocks): ModuleList(
+        (0-26): 27 x Qwen3_5MoeVisionBlock(
+          (norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+          (attn): Qwen3_5MoeVisionAttention(
+            (qkv): Linear(in_features=1152, out_features=3456, bias=True)
+            (proj): Linear(in_features=1152, out_features=1152, bias=True)
+          )
+          (mlp): Qwen3_5MoeVisionMLP(
+            (linear_fc1): Linear(in_features=1152, out_features=4304, bias=True)
+            (linear_fc2): Linear(in_features=4304, out_features=1152, bias=True)
+            (act_fn): GELUTanh()
+          )
+        )
+      )
+      (merger): Qwen3_5MoeVisionPatchMerger(
+        (norm): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+        (linear_fc1): Linear(in_features=4608, out_features=4608, bias=True)
+        (act_fn): GELU(approximate='none')
+        (linear_fc2): Linear(in_features=4608, out_features=2048, bias=True)
+      )
+    )
+    (language_model): Qwen3_5MoeTextModel(
+      (embed_tokens): Embedding(248320, 2048)
+      (layers): ModuleList(
+        (0-2): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (3): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (4-6): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (7): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (8-10): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (11): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (12-14): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (15): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (16-18): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (19): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (20-22): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (23): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (24-26): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (27): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (28-30): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (31): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (32-34): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (35): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (36-38): 3 x Qwen3_5MoeDecoderLayer(
+          (linear_attn): Qwen3_5MoeGatedDeltaNet(
+            (act): SiLUActivation()
+            (conv1d): Conv1d(8192, 8192, kernel_size=(4,), stride=(1,), padding=(3,), groups=8192, bias=False)
+            (norm): Qwen3_5MoeRMSNormGated()
+            (out_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (in_proj_qkv): Linear(in_features=2048, out_features=8192, bias=False)
+            (in_proj_z): Linear(in_features=2048, out_features=4096, bias=False)
+            (in_proj_b): Linear(in_features=2048, out_features=32, bias=False)
+            (in_proj_a): Linear(in_features=2048, out_features=32, bias=False)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+        (39): Qwen3_5MoeDecoderLayer(
+          (self_attn): Qwen3_5MoeAttention(
+            (q_proj): Linear(in_features=2048, out_features=8192, bias=False)
+            (k_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (v_proj): Linear(in_features=2048, out_features=512, bias=False)
+            (o_proj): Linear(in_features=4096, out_features=2048, bias=False)
+            (q_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+            (k_norm): Qwen3_5MoeRMSNorm((256,), eps=1e-06)
+          )
+          (mlp): Qwen3_5MoeSparseMoeBlock(
+            (gate): Qwen3_5MoeTopKRouter()
+            (experts): Qwen3_5MoeExperts(
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert): Qwen3_5MoeMLP(
+              (gate_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (up_proj): Linear(in_features=2048, out_features=512, bias=False)
+              (down_proj): Linear(in_features=512, out_features=2048, bias=False)
+              (act_fn): SiLUActivation()
+            )
+            (shared_expert_gate): Linear(in_features=2048, out_features=1, bias=False)
+          )
+          (input_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+          (post_attention_layernorm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+        )
+      )
+      (norm): Qwen3_5MoeRMSNorm((2048,), eps=1e-06)
+      (rotary_emb): Qwen3_5MoeTextRotaryEmbedding()
+    )
+  )
+  (lm_head): Linear(in_features=2048, out_features=248320, bias=False)
+)
