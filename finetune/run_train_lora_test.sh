@@ -1,0 +1,16 @@
+accelerate launch --config_file "/root/autodl-tmp/oki-agent/finetune/deepspeed_parallel_training/accelerate_config.yaml" /root/autodl-tmp/oki-agent/finetune/train_lora_test.py \
+    --model_name_or_path /root/autodl-tmp/models/qwen3.6-35b-a3b \
+    --learning_rate 2.0e-4 \
+    --max_steps 5 \
+    --num_train_epochs 1 \
+    --packing False\
+    --per_device_train_batch_size 1 \
+    --gradient_accumulation_steps 1 \
+    --eos_token '<|im_end|>' \
+    --eval_strategy no \
+    --eval_steps 100 \
+    --use_peft \
+    --lora_r 8 \
+    --lora_alpha 16 \
+    --lora_target_modules out_proj in_proj_qkv in_proj_z in_proj_b in_proj_a q_proj k_proj v_proj o_proj \
+    --output_dir /root/autodl-tmp/models/trl_deepspeed_lora_adapter \

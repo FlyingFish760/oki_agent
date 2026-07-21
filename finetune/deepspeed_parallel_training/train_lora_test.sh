@@ -1,4 +1,4 @@
-accelerate launch --config_file "/root/autodl-tmp/oki-agent/finetune/deepspeed_parallel_training/deepspeed_config.yaml"  /root/autodl-tmp/oki-agent/finetune/deepspeed_parallel_training/train.py \
+accelerate launch --config_file "/root/autodl-tmp/oki-agent/finetune/deepspeed_parallel_training/accelerate_config.yaml"  /root/autodl-tmp/oki-agent/finetune/deepspeed_parallel_training/train.py \
 --seed 100 \
 --model_name_or_path "/root/autodl-tmp/models/qwen3.6-35b-a3b" \
 --dataset_name "smangrul/ultrachat-10k-chatml" \
