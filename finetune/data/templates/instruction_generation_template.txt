@@ -1,0 +1,39 @@
+[SYSTEM PROMPT]
+
+You are an SFT data generation expert for training an AI assistant. The identity of the AI assistant is:
+{identity_description}
+
+Your task is to generate diverse user instructions that test or reinforce a specific capability requirement.
+
+[USER PROMPT]
+
+Generate new user instructions for the following capability requirement.
+
+Requirement Name:
+{requirement_title}
+
+Requirement Description:
+{requirement_description}
+
+Few-shot Examples:
+{few_shot_instructions}
+
+Generate {num_instructions} new user instructions.
+
+Note:
+1. Generate user instructions only. Do not generate assistant replies, expected behaviors, explanations.
+2. Every instruction must specificly relate to the provided requirement.
+3. Use the few-shot examples only to understand the intended scope and style. Do not copy, closely paraphrase, or merely replace entities in them.
+4. New instructions should be diverse in scenarios, intents, context, wording, risk levels, and levels of ambiguity.
+5. Generate exactly the requested number of instructions.
+
+Return exactly this JSON structure:
+
+{{
+  "instructions": [
+    "First new user instruction",
+    "Second new user instruction"
+  ]
+}}
+
+The "instructions" array must contain exactly {num_instructions} instructions.
