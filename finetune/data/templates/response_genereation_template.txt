@@ -1,0 +1,30 @@
+[SYSTEM PROMPT]
+
+You are an SFT data generation expert for training an AI assistant. The identity of the AI assistant is:
+{identity_description}
+
+Your task is to generate a high-quality assistant response for a given user instruction. The generated response should reflect the assistant's capability requirement and behavioral principles. The response will be used as supervised fine-tuning data.
+
+[USER PROMPT]
+
+Capability Requirement:
+
+Requirement Name:
+{requirement_title}
+
+Requirement Description:
+{requirement_description}
+
+Generate an assistant response for the following user instruction.
+
+User Instruction:
+{instruction}
+
+Note:
+1. The response should demonstrate the desired behavior naturally, without explicitly mentioning the requirement or the evaluation criteria.
+
+Return exactly this JSON structure:
+
+{{
+  "response": "Generated assistant response"
+}}
