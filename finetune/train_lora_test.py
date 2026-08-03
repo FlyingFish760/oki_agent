@@ -64,6 +64,7 @@ python trl/scripts/sft.py \
 
 import argparse
 import os
+from dataclasses import dataclass, field
 
 from accelerate import logging
 from datasets import load_dataset
@@ -88,6 +89,20 @@ logger = logging.get_logger(__name__)
 
 # Enable logging in a Hugging Face Space
 os.environ.setdefault("TRACKIO_SPACE_ID", "trl-trackio")
+
+
+@dataclass
+class OkiScriptArguments(ScriptArguments):
+    non_thinking_training: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Add chat_template_kwargs={'enable_thinking': False} to every "
+                "dataset sample before SFT training."
+            ),
+            "aliases": ["--non-thinking-training"],
+        },
+    )
 
 
 def main(script_args, training_args, model_args, dataset_args)->None:
@@ -133,10 +148,13 @@ def main(script_args, training_args, model_args, dataset_args)->None:
         if messages[-1]["role"] != "assistant":
             raise ValueError(f"Expected final message to be assistant, got {messages[-1]['role']}")
 
-        return {
+        converted = {
             "prompt": messages[:-1],
             "completion": [messages[-1]],
         }
+        if script_args.non_thinking_training:
+            converted["chat_template_kwargs"] = {"enable_thinking": False}
+        return converted
 
     dataset = dataset.map(to_conversational_pc, remove_columns=dataset["train"].column_names)
 
@@ -207,7 +225,7 @@ def main(script_args, training_args, model_args, dataset_args)->None:
 
 
 def make_parser(subparsers: argparse._SubParsersAction | None = None):
-    dataclass_types = (ScriptArguments, SFTConfig, ModelConfig, DatasetMixtureConfig)
+    dataclass_types = (OkiScriptArguments, SFTConfig, ModelConfig, DatasetMixtureConfig)
     if subparsers is not None:
         parser = subparsers.add_parser("sft", help="Run the SFT training script", dataclass_types=dataclass_types)
     else:
