@@ -12,5 +12,6 @@ accelerate launch --config_file "/root/autodl-tmp/oki-agent/finetune/deepspeed_p
     --use_peft \
     --lora_r 8 \
     --lora_alpha 16 \
-    --lora_target_modules out_proj in_proj_qkv in_proj_z in_proj_b in_proj_a q_proj k_proj v_proj o_proj \
+    --lora_target_modules in_proj_qkv in_proj_z out_proj q_proj k_proj v_proj o_proj \
     --output_dir /root/autodl-tmp/models/trl_deepspeed_lora_adapter \
+    --non_thinking_training True \

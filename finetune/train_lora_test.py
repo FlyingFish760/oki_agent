@@ -181,46 +181,48 @@ def main(script_args, training_args, model_args, dataset_args)->None:
         peft_config=get_peft_config(model_args),
     )
 
-    # from transformers import AutoProcessor
-    # processor = AutoProcessor.from_pretrained(model_args.model_name_or_path)
-    # tokenizer = processor.tokenizer
+    from transformers import AutoProcessor
+    processor = AutoProcessor.from_pretrained(model_args.model_name_or_path)
+    tokenizer = processor.tokenizer
 
-    # batch = next(iter(trainer.get_train_dataloader()))
+    batch = next(iter(trainer.get_train_dataloader()))
 
-    # input_ids = batch["input_ids"]
-    # labels = batch["labels"]
-    # attention_mask = batch.get("attention_mask")
+    input_ids = batch["input_ids"]
+    labels = batch["labels"]
+    attention_mask = batch.get("attention_mask")
 
-    # sample_input_ids = input_ids[0].cpu()
-    # sample_labels = labels[0].cpu()
+    sample_input_ids = input_ids[0].cpu()
+    sample_labels = labels[0].cpu()
 
-    # masked_ids = [
-    #     token_id.item()
-    #     for token_id, label in zip(sample_input_ids, sample_labels)
-    #     if label == -100
-    # ]
+    masked_ids = [
+        token_id.item()
+        for token_id, label in zip(sample_input_ids, sample_labels)
+        if label == -100
+    ]
 
-    # trained_ids = [
-    #     token_id.item()
-    #     for token_id, label in zip(sample_input_ids, sample_labels)
-    #     if label != -100
-    # ]
+    trained_ids = [
+        token_id.item()
+        for token_id, label in zip(sample_input_ids, sample_labels)
+        if label != -100
+    ]
 
-    # print("\n===== 不参与 loss 的 token =====")
-    # print(
-    #     tokenizer.decode(
-    #         masked_ids,
-    #         skip_special_tokens=False,
-    #     )
-    # )
+    print("\n===== 不参与 loss 的 token =====")
+    print(
+        tokenizer.decode(
+            masked_ids,
+            skip_special_tokens=False,
+        )
+    )
 
-    # print("\n===== 参与 loss 的 token =====")
-    # print(
-    #     tokenizer.decode(
-    #         trained_ids,
-    #         skip_special_tokens=False,
-    #     )
-    # )
+    print("\n===== 参与 loss 的 token =====")
+    print(
+        tokenizer.decode(
+            trained_ids,
+            skip_special_tokens=False,
+        )
+    )
+    import sys
+    sys.exit()
 
 
     # Train the model
