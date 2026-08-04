@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dtype",
         choices=["float16", "bfloat16", "float32"],
-        default="float16",
+        default="bfloat16",
         help="Torch dtype used when loading the base model. Default: %(default)s.",
     )
     parser.add_argument(
