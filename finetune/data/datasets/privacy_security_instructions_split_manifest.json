@@ -1,0 +1,70 @@
+{
+  "input": "finetune\\data\\datasets\\privacy_security_instructions.jsonl",
+  "seed": 42,
+  "ratios": {
+    "train": 0.8,
+    "valid": 0.1,
+    "test": 0.1
+  },
+  "totals": {
+    "all": 300,
+    "train": 236,
+    "valid": 32,
+    "test": 32
+  },
+  "requirements": {
+    "requirement_01": {
+      "total": 38,
+      "train": 30,
+      "valid": 4,
+      "test": 4
+    },
+    "requirement_02": {
+      "total": 38,
+      "train": 30,
+      "valid": 4,
+      "test": 4
+    },
+    "requirement_03": {
+      "total": 38,
+      "train": 30,
+      "valid": 4,
+      "test": 4
+    },
+    "requirement_04": {
+      "total": 38,
+      "train": 30,
+      "valid": 4,
+      "test": 4
+    },
+    "requirement_05": {
+      "total": 37,
+      "train": 29,
+      "valid": 4,
+      "test": 4
+    },
+    "requirement_06": {
+      "total": 37,
+      "train": 29,
+      "valid": 4,
+      "test": 4
+    },
+    "requirement_07": {
+      "total": 37,
+      "train": 29,
+      "valid": 4,
+      "test": 4
+    },
+    "requirement_08": {
+      "total": 37,
+      "train": 29,
+      "valid": 4,
+      "test": 4
+    }
+  },
+  "outputs": {
+    "train": "finetune\\data\\datasets\\privacy_security_instructions_train.jsonl",
+    "valid": "finetune\\data\\datasets\\privacy_security_instructions_valid.jsonl",
+    "test": "finetune\\data\\datasets\\privacy_security_instructions_test.jsonl"
+  }
+}

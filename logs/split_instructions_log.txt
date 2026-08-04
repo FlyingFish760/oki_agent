@@ -1,0 +1,13 @@
+E:\LLM\oki\oki_agent> python finetune\data\split_instructions.py `  --input finetune\data\datasets\privacy_security_instructions.jsonl `  --train-ratio 0.8 `  --valid-ratio 0.1 `  --test-ratio 0.1 `  --seed 42 `  --output-dir finetune\data\datasets `  --prefix privacy_security_instructions
+
+Split totals: train=236, valid=32, test=32
+requirement_01: total=38, train=30, valid=4, test=4
+requirement_02: total=38, train=30, valid=4, test=4
+requirement_03: total=38, train=30, valid=4, test=4
+requirement_04: total=38, train=30, valid=4, test=4
+requirement_05: total=37, train=29, valid=4, test=4
+requirement_06: total=37, train=29, valid=4, test=4
+requirement_07: total=37, train=29, valid=4, test=4
+requirement_08: total=37, train=29, valid=4, test=4
+Split files written to finetune\data\datasets
+Manifest written to finetune\data\datasets\privacy_security_instructions_split_manifest.json

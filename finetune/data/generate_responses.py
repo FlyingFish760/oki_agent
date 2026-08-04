@@ -202,6 +202,7 @@ def build_sft_record(
         "instruction_teacher_model": source.get("teacher_model"),
         "response_teacher_model": teacher_model,
         "response_prompt_template": prompt_template_name(prompt_template),
+        "split": source.get("split"),
         "messages": [
             {"role": "user", "content": source["instruction"].strip()},
             {"role": "assistant", "content": response},

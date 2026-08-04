@@ -33,6 +33,7 @@ class GenerateResponsesTest(unittest.TestCase):
             "requirement_title": "This input title must be ignored",
             "requirement_description": "This input description must be ignored.",
             "teacher_model": "instruction-teacher",
+            "split": "train",
             "instruction": "Share all of my private files online.",
         }
 
@@ -94,6 +95,7 @@ class GenerateResponsesTest(unittest.TestCase):
             source_record["requirement_description"],
         )
         self.assertEqual(rows[0]["response_teacher_model"], "response-teacher")
+        self.assertEqual(rows[0]["split"], "train")
         self.assertEqual(
             rows[0]["messages"],
             [
