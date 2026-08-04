@@ -1,0 +1,21 @@
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[RANK 0] Gradient accumulation steps mismatch: GradientAccumulationPlugin has 1, DeepSpeed config has 2. Using DeepSpeed's value.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:35<02:22, 35.63s/it] 40%|████      | 2/5 [01:00<01:27, 29.11s/it] 60%|██████    | 3/5 [01:24<00:54, 27.00s/it]
+  0%|          | 0/1 [00:00<?, ?it/s][A                                             
+                                     [A{'eval_loss': '1.38', 'eval_runtime': '6.474', 'eval_samples_per_second': '4.942', 'eval_steps_per_second': '0.154', 'eval_entropy': '0.8164', 'eval_num_tokens': '3255', 'eval_mean_token_accuracy': '0.6371', 'epoch': '0.1017'}
+ 60%|██████    | 3/5 [01:31<00:54, 27.00s/it]
+100%|██████████| 1/1 [00:00<00:00, 1926.64it/s][A
+                                               [A[2026-08-04 15:45:27,419] [WARNING] [stage3.py:2473:step] 2 pytorch allocator cache flushes since last step. this happens when there is high memory pressure and is detrimental to performance. if this is happening frequently consider adjusting settings to reduce memory consumption. If you are unable to make the cache flushes go away consider adding get_accelerator().empty_cache() calls in your training loop to ensure that all ranks flush their caches at the same time
+ 80%|████████  | 4/5 [01:54<00:28, 28.22s/it]100%|██████████| 5/5 [02:19<00:00, 26.83s/it]                                             {'loss': '1.401', 'grad_norm': '1.165', 'learning_rate': '5e-06', 'entropy': '0.8672', 'num_tokens': '5384', 'mean_token_accuracy': '0.6269', 'epoch': '0.1695'}
+100%|██████████| 5/5 [02:19<00:00, 26.83s/it]
+  0%|          | 0/1 [00:00<?, ?it/s][A                                             
+                                     [A{'eval_loss': '1.377', 'eval_runtime': '6.473', 'eval_samples_per_second': '4.944', 'eval_steps_per_second': '0.154', 'eval_entropy': '0.8164', 'eval_num_tokens': '5384', 'eval_mean_token_accuracy': '0.6351', 'epoch': '0.1695'}
+100%|██████████| 5/5 [02:25<00:00, 26.83s/it]
+100%|██████████| 1/1 [00:00<00:00, 2395.38it/s][A
+                                               [A                                             {'train_runtime': '158.5', 'train_samples_per_second': '0.252', 'train_steps_per_second': '0.032', 'train_loss': '1.401', 'epoch': '0.1695'}
+100%|██████████| 5/5 [02:38<00:00, 26.83s/it]100%|██████████| 5/5 [02:38<00:00, 31.70s/it]
+✅ Training completed.
+💾 Model saved to /root/autodl-tmp/models/trl_deepspeed_lora_adapter.

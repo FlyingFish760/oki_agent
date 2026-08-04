@@ -1,0 +1,19 @@
+Map:   0%|          | 0/236 [00:00<?, ? examples/s]Map:   0%|          | 0/236 [00:00<?, ? examples/s]Map: 100%|██████████| 236/236 [00:00<00:00, 10323.04 examples/s]
+Map:   0%|          | 0/32 [00:00<?, ? examples/s]Map: 100%|██████████| 32/32 [00:00<00:00, 5268.40 examples/s]
+Map: 100%|██████████| 236/236 [00:00<00:00, 10887.23 examples/s]
+Tokenizing train dataset:   0%|          | 0/236 [00:00<?, ? examples/s]Tokenizing train dataset:   8%|▊         | 19/236 [00:00<00:01, 130.32 examples/s]Tokenizing train dataset:  28%|██▊       | 67/236 [00:00<00:00, 301.77 examples/s]Tokenizing train dataset:  50%|████▉     | 117/236 [00:00<00:00, 379.45 examples/s]Tokenizing train dataset:  70%|███████   | 166/236 [00:00<00:00, 415.74 examples/s]Tokenizing train dataset:  91%|█████████ | 214/236 [00:00<00:00, 435.77 examples/s]Tokenizing train dataset: 100%|██████████| 236/236 [00:00<00:00, 371.11 examples/s]
+Truncating train dataset:   0%|          | 0/236 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 236/236 [00:00<00:00, 36833.21 examples/s]
+Tokenizing eval dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Tokenizing eval dataset: 100%|██████████| 32/32 [00:00<00:00, 457.62 examples/s]
+Truncating eval dataset:   0%|          | 0/32 [00:00<?, ? examples/s]Truncating eval dataset: 100%|██████████| 32/32 [00:00<00:00, 7701.71 examples/s]
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[RANK 0] Gradient accumulation steps mismatch: GradientAccumulationPlugin has 1, DeepSpeed config has 4. Using DeepSpeed's value.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:59<03:58, 59.56s/it] 40%|████      | 2/5 [01:47<02:37, 52.52s/it] 60%|██████    | 3/5 [02:34<01:40, 50.26s/it]
+  0%|          | 0/1 [00:00<?, ?it/s][A                                             
+                                     [A{'eval_loss': '1.381', 'eval_runtime': '6.47', 'eval_samples_per_second': '4.946', 'eval_steps_per_second': '0.155', 'eval_entropy': '0.8164', 'eval_num_tokens': '6385', 'eval_mean_token_accuracy': '0.6331', 'epoch': '0.2034'}
+ 60%|██████    | 3/5 [02:41<01:40, 50.26s/it]
+100%|██████████| 1/1 [00:00<00:00, 1901.32it/s][A
+                                               [A[2026-08-04 15:34:53,344] [WARNING] [stage3.py:2473:step] 1 pytorch allocator cache flushes since last step. this happens when there is high memory pressure and is detrimental to performance. if this is happening frequently consider adjusting settings to reduce memory consumption. If you are unable to make the cache flushes go away consider adding get_accelerator().empty_cache() calls in your training loop to ensure that all ranks flush their caches at the same time
+ 80%|████████  | 4/5 [03:27<00:51, 51.40s/it]
