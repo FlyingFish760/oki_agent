@@ -93,6 +93,20 @@ os.environ.setdefault("TRACKIO_SPACE_ID", "trl-trackio")
 
 @dataclass
 class OkiScriptArguments(ScriptArguments):
+    custom_train_data_path: str = field(
+        default="finetune/data/datasets/instruction_en_train.jsonl",
+        metadata={
+            "help": "Path to the local JSONL training dataset.",
+            "aliases": ["--custom-train-data-path"],
+        },
+    )
+    custom_eval_data_path: str = field(
+        default="finetune/data/datasets/instruction_en_eval.jsonl",
+        metadata={
+            "help": "Path to the local JSONL evaluation dataset.",
+            "aliases": ["--custom-eval-data-path"],
+        },
+    )
     non_thinking_training: bool = field(
         default=False,
         metadata={
@@ -136,8 +150,8 @@ def main(script_args, training_args, model_args, dataset_args)->None:
     dataset = load_dataset(
         "json",
         data_files={
-            "train": "finetune/data/datasets/instruction_en_train.jsonl",
-            "test": "finetune/data/datasets/instruction_en_eval.jsonl",
+            "train": script_args.custom_train_data_path,
+            "test": script_args.custom_eval_data_path,
         },
     )
 
