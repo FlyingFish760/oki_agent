@@ -94,14 +94,14 @@ os.environ.setdefault("TRACKIO_SPACE_ID", "trl-trackio")
 @dataclass
 class OkiScriptArguments(ScriptArguments):
     custom_train_data_path: str = field(
-        default="finetune/data/datasets/instruction_en_train.jsonl",
+        default="finetune/data/datasets/privacy_security_train.jsonl",
         metadata={
             "help": "Path to the local JSONL training dataset.",
             "aliases": ["--custom-train-data-path"],
         },
     )
     custom_eval_data_path: str = field(
-        default="finetune/data/datasets/instruction_en_eval.jsonl",
+        default="finetune/data/datasets/privacy_security_valid.jsonl",
         metadata={
             "help": "Path to the local JSONL evaluation dataset.",
             "aliases": ["--custom-eval-data-path"],
