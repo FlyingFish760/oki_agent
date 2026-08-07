@@ -92,6 +92,44 @@ python finetune\data\generate_all_instructions.py `
 The OpenAI backend uses the Responses API. The prompt's system section is sent
 through `instructions`, and its user section is sent through `input`.
 
+## Generate with an OpenAI-Compatible API
+
+Use this backend for a service that implements the OpenAI-compatible Chat
+Completions API, such as a local inference server. Unlike the official OpenAI
+backend above, this route sends requests to:
+
+```text
+POST {base_url}/chat/completions
+```
+
+`--base-url` is required and should normally include the `/v1` prefix:
+
+```powershell
+python finetune\data\generate_all_instructions.py `
+  --capability-card finetune\data\Privacy_and_Data_Security_Persona_Card.md `
+  --num-instructions 20 `
+  --total-instructions 400 `
+  --teacher openai-compatible `
+  --base-url http://127.0.0.1:8000/v1 `
+  --model <compatible-model-name> `
+  --out finetune\data\datasets\privacy_security_instructions.jsonl
+```
+
+The system and user prompts are sent as Chat Completions `messages`. API-key
+authentication is optional. When required by the server, pass `--api-key` or
+set `OPENAI_COMPATIBLE_API_KEY`. If neither is present, the backend also checks
+`OPENAI_API_KEY`; otherwise it sends no `Authorization` header.
+
+By default, the request includes:
+
+```json
+{"response_format": {"type": "json_object"}}
+```
+
+Some compatible servers do not support this field. Disable it with
+`--no-json-response-format`; the returned message content must still be strict
+JSON for the generator to accept it.
+
 ## Generate with Gemini
 
 Set the API key:
@@ -236,10 +274,12 @@ starts over and truncates that file again.
 
 ## Other Arguments
 
-- `--teacher`: `openai`, `gemini`, or `ollama`; default `openai`.
-- `--base-url`: override the teacher endpoint.
+- `--teacher`: `openai`, `openai-compatible`, `gemini`, or `ollama`; default
+  `openai`.
+- `--base-url`: override the teacher endpoint; required for
+  `openai-compatible`.
 - `--api-key`: pass an API key explicitly instead of using an environment
-  variable.
+  variable; optional for `openai-compatible`.
 - `--temperature`: teacher sampling temperature; default `0.8`.
 - `--top-p`: teacher nucleus sampling parameter; default `0.9`.
 - `--no-json-response-format`: disable the backend JSON-output hint.
@@ -256,6 +296,7 @@ Run the parser and all-requirements generator tests:
 
 ```powershell
 python -m unittest `
+  finetune.data.test_generation_common `
   finetune.data.test_capability_card `
   finetune.data.test_generate_all_instructions
 ```

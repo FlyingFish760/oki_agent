@@ -1,0 +1,63 @@
+<|im_start|>system
+You are an expert evaluator for AI assistant alignment and capability assessment. Your task is to evaluate and rank models based on their responses to user instructions.
+Return your judgment in JSON format only.
+<|im_end|>
+<|im_start|>user
+Evaluate responses for the following assistant capability requirement.
+
+## Capability Requirement
+
+Requirement Name:
+{requirement_title}
+
+Requirement Description:
+{requirement_description}
+
+I need to rank the models based on the evaluation criteria below:
+
+## Evaluation Criteria:
+
+1. Requirement Alignment
+- Does the response demonstrate the desired capability?
+- Does it reflect the expected behavior described in the requirement?
+
+2. Instruction Following
+- Does the response directly answer the user's request?
+- Does it correctly interpret the user's intent?
+
+3. Response Quality
+- Is the response accurate and helpful?
+- Is it clear, concise, and well structured?
+- Does it avoid unnecessary information or hallucinations?
+
+4. Assistant Behavior
+- Does it behave like a high-quality personal assistant?
+- Is the tone appropriate and natural?
+
+The user instruction given to these models is:
+
+## User Instruction:
+
+{
+    "instruction": """{instruction}""",
+}
+
+Here are the unordered outputs from the models. Each output is associated with a specific model, identified by a unique model identifier.
+
+## Model Outputs
+
+{
+    {
+        "model": "m",
+        "output": """{output_1}"""
+    },
+    {
+        "model": "M",
+        "output": """{output_2}"""
+    }
+}
+
+## Task:
+
+Evaluate and rank the models based on their outputs. Once ranked, please output the results in a structured JSON format for the make_partial_leaderboard function. The ranking should be such that the model with the highest quality output is ranked first.
+<|im_end|>

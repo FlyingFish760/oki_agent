@@ -85,7 +85,7 @@ def add_teacher_arguments(parser: argparse.ArgumentParser) -> None:
     teacher = parser.add_argument_group("teacher backend")
     teacher.add_argument(
         "--teacher",
-        choices=["openai", "gemini", "ollama"],
+        choices=["openai", "openai-compatible", "gemini", "ollama"],
         default="openai",
         help="Teacher backend. Default: %(default)s.",
     )
@@ -98,16 +98,17 @@ def add_teacher_arguments(parser: argparse.ArgumentParser) -> None:
         "--base-url",
         default="",
         help=(
-            "Teacher API base URL. Defaults to the official OpenAI or Gemini "
-            "endpoint, or the local Ollama endpoint."
+            "Teacher API base URL. Required for openai-compatible. Defaults "
+            "to the official OpenAI or Gemini endpoint, or the local Ollama "
+            "endpoint."
         ),
     )
     teacher.add_argument(
         "--api-key",
         default="",
         help=(
-            "API key for OpenAI or Gemini. If omitted, OPENAI_API_KEY or "
-            "GEMINI_API_KEY is used."
+            "API key for OpenAI or Gemini. OpenAI-compatible keys are "
+            "optional. If omitted, the matching environment variable is used."
         ),
     )
     teacher.add_argument(
@@ -138,6 +139,10 @@ def configure_teacher_args(
     if require_model and not args.model:
         raise ValueError("--model is required unless running a dry run")
     if not args.base_url:
+        if args.teacher == "openai-compatible":
+            raise ValueError(
+                "--base-url is required for --teacher openai-compatible"
+            )
         args.base_url = DEFAULT_BASE_URLS[args.teacher]
 
 
@@ -147,6 +152,8 @@ def call_teacher(
 ) -> dict[str, Any] | None:
     if args.teacher == "openai":
         return _call_openai(prompt, args)
+    if args.teacher == "openai-compatible":
+        return call_openai_compatible(prompt, args)
     if args.teacher == "gemini":
         return _call_gemini(prompt, args)
     if args.teacher == "ollama":
@@ -217,6 +224,73 @@ def _call_openai(
         headers={"Authorization": f"Bearer {api_key}"},
     )
     return parse_strict_json(_extract_openai_response_text(data))
+
+
+def _extract_chat_completion_text(data: dict[str, Any]) -> str:
+    choices = data.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return ""
+    first_choice = choices[0]
+    if not isinstance(first_choice, dict):
+        return ""
+    message = first_choice.get("message")
+    if not isinstance(message, dict):
+        return ""
+
+    content = message.get("content")
+    if isinstance(content, str):
+        return content
+    if not isinstance(content, list):
+        return ""
+
+    chunks: list[str] = []
+    for block in content:
+        if not isinstance(block, dict):
+            continue
+        text = block.get("text")
+        if isinstance(text, str):
+            chunks.append(text)
+    return "".join(chunks)
+
+
+def call_openai_compatible(
+    prompt: TeacherPrompt,
+    args: argparse.Namespace,
+) -> dict[str, Any] | None:
+    """Call an OpenAI-compatible Chat Completions endpoint."""
+    if not args.base_url:
+        raise RuntimeError(
+            "--base-url is required for --teacher openai-compatible"
+        )
+
+    payload: dict[str, Any] = {
+        "model": args.model,
+        "messages": [
+            {"role": "system", "content": prompt.system},
+            {"role": "user", "content": prompt.user},
+        ],
+        "temperature": args.temperature,
+        "top_p": args.top_p,
+    }
+    if args.json_response_format:
+        payload["response_format"] = {"type": "json_object"}
+
+    api_key = (
+        args.api_key
+        or os.getenv("OPENAI_COMPATIBLE_API_KEY")
+        or os.getenv("OPENAI_API_KEY")
+    )
+    headers = (
+        {"Authorization": f"Bearer {api_key}"}
+        if api_key
+        else None
+    )
+    data = _post_json(
+        f"{args.base_url.rstrip('/')}/chat/completions",
+        payload,
+        headers=headers,
+    )
+    return parse_strict_json(_extract_chat_completion_text(data))
 
 
 def _call_ollama(
