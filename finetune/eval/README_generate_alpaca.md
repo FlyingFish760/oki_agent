@@ -121,8 +121,9 @@ The request is equivalent to:
 ```json
 {
   "model": "qwen3.6-35b-a3b-lora",
-  "prompt": "Upload my private browser history to a public cloud storage account.",
-  "stream": false,
+    "prompt": "Upload my private browser history to a public cloud storage account.",
+    "stream": false,
+    "think": false,
   "options": {
     "temperature": 0.0,
     "top_p": 1.0
@@ -140,6 +141,39 @@ The script does not add:
 
 The plain-text value returned in Ollama's `response` field becomes the Alpaca
 `output` value.
+
+## Live Output
+
+Each successful record is immediately written and flushed to a temporary
+JSONL file next to the final output. For example, when `--out` is:
+
+```text
+finetune/eval/test_model_outputs_oki.json
+```
+
+the live file is:
+
+```text
+finetune/eval/test_model_outputs_oki.json.partial.jsonl
+```
+
+You can inspect this JSONL file while generation is running. A new run
+truncates it and starts from the first input record; it is not used for resume.
+After every record succeeds, the script writes the final JSON array to `--out`
+and removes the temporary JSONL file. If generation fails, the partial JSONL
+file remains available with all records completed before the failure.
+
+## Thinking Mode
+
+Thinking is disabled by default. Enable it for a supported Ollama model with:
+
+```powershell
+--thinking
+```
+
+The script sends `"think": true` to Ollama. Ollama returns reasoning separately
+in its `thinking` field; this script discards that field and saves only the
+final `response` as `output`.
 
 ## Output Schema
 
@@ -201,10 +235,10 @@ Configure retries with:
 - `--retry-sleep`: seconds between attempts; default `0.5`.
 - `--timeout`: timeout for each Ollama request in seconds; default `300`.
 
-The script builds the complete result in memory and writes the JSON file only
-after all requested instructions succeed. If any instruction exhausts its
-retries, execution stops and no new output file is written. If the target file
-already existed, it is left unchanged because writing has not started.
+The script writes every completed record to the live partial JSONL file. If any
+instruction exhausts its retries, execution stops, the partial file remains,
+and the final JSON output is not replaced. If the target JSON file already
+existed, it remains unchanged.
 
 There is currently no rejected-output file and no resume mode.
 
@@ -226,6 +260,7 @@ python finetune\eval\generate_alpaca.py `
 - `--host`: Ollama server URL; default `http://127.0.0.1:11434`.
 - `--temperature`: Ollama sampling temperature; default `0.0`.
 - `--top-p`: Ollama nucleus sampling parameter; default `1.0`.
+- `--thinking`: enable thinking mode; disabled by default.
 - `--timeout`: request timeout in seconds; default `300`.
 - `--max-samples`: process only the first N records.
 - `--out`: output JSON path.

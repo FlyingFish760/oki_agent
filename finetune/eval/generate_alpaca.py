@@ -95,6 +95,7 @@ def call_ollama(
     host: str,
     temperature: float,
     top_p: float,
+    thinking: bool,
     timeout: float,
 ) -> str:
     """Send the instruction unchanged as the Ollama generation prompt."""
@@ -102,6 +103,7 @@ def call_ollama(
         "model": model,
         "prompt": instruction,
         "stream": False,
+        "think": thinking,
         "options": {
             "temperature": temperature,
             "top_p": top_p,
@@ -144,6 +146,7 @@ def generate_with_retries(
                 host=args.host,
                 temperature=args.temperature,
                 top_p=args.top_p,
+                thinking=args.thinking,
                 timeout=args.timeout,
             )
         except (
@@ -192,6 +195,16 @@ def write_json(path: Path, records: list[dict[str, Any]]) -> None:
     )
 
 
+def partial_output_path(path: Path) -> Path:
+    """Return the live JSONL path used while building the final JSON file."""
+    return path.with_name(f"{path.name}.partial.jsonl")
+
+
+def append_jsonl(handle: Any, record: dict[str, Any]) -> None:
+    handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+    handle.flush()
+
+
 def run(args: argparse.Namespace) -> None:
     if not args.instructions.exists():
         raise FileNotFoundError(
@@ -217,19 +230,22 @@ def run(args: argparse.Namespace) -> None:
         print(f"direct_prompt: {source['instruction']}")
         return
 
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    partial_path = partial_output_path(args.out)
     generated: list[dict[str, Any]] = []
-    for index, source in enumerate(records, start=1):
-        requirement = get_requirement(
-            card,
-            source["requirement_id"],
-            source_id=source.get("id"),
-        )
-        output = generate_with_retries(
-            instruction=source["instruction"],
-            args=args,
-        )
-        generated.append(
-            build_alpaca_record(
+    print(f"Live JSONL output: {partial_path}")
+    with partial_path.open("w", encoding="utf-8") as partial_file:
+        for index, source in enumerate(records, start=1):
+            requirement = get_requirement(
+                card,
+                source["requirement_id"],
+                source_id=source.get("id"),
+            )
+            output = generate_with_retries(
+                instruction=source["instruction"],
+                args=args,
+            )
+            generated_record = build_alpaca_record(
                 source,
                 record_id=index,
                 capability_card=args.capability_card,
@@ -237,10 +253,12 @@ def run(args: argparse.Namespace) -> None:
                 output=output,
                 model=args.model,
             )
-        )
-        print(f"[{index}/{len(records)}] generated", end="\r")
+            generated.append(generated_record)
+            append_jsonl(partial_file, generated_record)
+            print(f"[{index}/{len(records)}] generated", end="\r")
 
     write_json(args.out, generated)
+    partial_path.unlink()
     print(
         f"\nGeneration complete: wrote {len(generated)} records to {args.out}"
     )
@@ -293,6 +311,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top-p", type=float, default=1.0)
+    parser.add_argument(
+        "--thinking",
+        action="store_true",
+        help="Enable thinking mode for supported Ollama models.",
+    )
     parser.add_argument(
         "--timeout",
         type=float,
