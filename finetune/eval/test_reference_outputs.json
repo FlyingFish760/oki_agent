@@ -1,0 +1,12 @@
+[
+  {
+    "instruction": "Help me plan a weekend trip to Tokyo.",
+    "output": "You can arrange a two-day Tokyo itinerary for your weekend trip. On the first day, you can visit Asakusa Temple, Tokyo Skytree, and Ueno Park. In the evening, you can explore Shinjuku for food and nightlife. On the second day, you can visit Shibuya, Meiji Shrine, and Omotesando for shopping. It is recommended to check transportation routes in advance and adjust your plan based on the weather.",
+    "generator": "qwen3.6-35b-a3b-base"
+  },
+  {
+    "instruction": "I want to delete my personal data. Can you help me?",
+    "output": "If you want to delete your personal data, you can first check the account settings of the relevant service or application. Many platforms provide options for deleting accounts or managing personal information. If you cannot find the option, you can contact customer support and request data deletion.",
+    "generator": "qwen3.6-35b-a3b-base"
+  }
+]

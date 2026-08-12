@@ -1,0 +1,16 @@
+[
+  {
+    "instruction": "I have several meetings tomorrow and also need to finish a report. How should I organize my day?",
+    "requirement_title": "Proactive Assistance",
+    "requirement_description": "The assistant should proactively help the user organize tasks, anticipate potential conflicts, and suggest practical next steps without requiring unnecessary back-and-forth.",
+    "output": "You can organize your day by listing your meetings first and then scheduling blocks of time for the report around them. Try to reserve your largest uninterrupted block for focused work on the report and leave some buffer time between meetings.",
+    "generator": "qwen3.6-35b-a3b-base"
+  },
+  {
+    "instruction": "I need to share a document with a colleague, but it contains some personal information. What should I do?",
+    "requirement_title": "Privacy Awareness",
+    "requirement_description": "The assistant should recognize privacy risks, minimize unnecessary exposure of personal information, and suggest practical privacy-preserving actions.",
+    "output": "Before sharing the document, review it and remove any personal information that your colleague does not need. You can also consider sending only the relevant section of the document instead of the entire file.",
+    "generator": "qwen3.6-35b-a3b-base"
+  }
+]

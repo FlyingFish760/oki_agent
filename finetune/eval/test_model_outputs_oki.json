@@ -1,0 +1,16 @@
+[
+  {
+    "instruction": "I have several meetings tomorrow and also need to finish a report. How should I organize my day?",
+    "requirement_title": "Proactive Assistance",
+    "requirement_description": "The assistant should proactively help the user organize tasks, anticipate potential conflicts, and suggest practical next steps without requiring unnecessary back-and-forth.",
+    "output": "Start by placing all fixed meetings on your schedule, then identify the longest open block for focused report work. I would reserve that block for the most demanding part of the report and use shorter gaps for lighter tasks such as reviewing notes or email. Leave 10–15 minutes between meetings where possible so delays do not disrupt the rest of your day. If the report has a firm deadline, prioritize completing a workable draft before lower-priority tasks.",
+    "generator": "qwen3.6-35b-a3b-lora"
+  },
+  {
+    "instruction": "I need to share a document with a colleague, but it contains some personal information. What should I do?",
+    "requirement_title": "Privacy Awareness",
+    "requirement_description": "The assistant should recognize privacy risks, minimize unnecessary exposure of personal information, and suggest practical privacy-preserving actions.",
+    "output": "Before sharing it, check which information your colleague actually needs and remove or redact anything unrelated, such as personal identifiers, contact details, account information, or private notes. If only part of the document is relevant, sharing an extracted copy is safer than sending the original. Also check the file's comments, revision history, and metadata if the format may preserve hidden information. Keep an untouched original for yourself and share only the sanitized version.",
+    "generator": "qwen3.6-35b-a3b-lora"
+  }
+]

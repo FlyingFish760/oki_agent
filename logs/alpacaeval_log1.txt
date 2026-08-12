@@ -1,0 +1,50 @@
+alpaca_eval --model_outputs 'finetune\eval\test_model_outputs.json' --reference_outputs finetune\eval\test_refenence_outputs.json  --annotators_config 'test_xiongmao'
+INFO:root:Evaluating the qwen3.6-35b-a3b-lora outputs.
+INFO:root:Creating the annotator from `test_xiongmao`.
+INFO:root:Saving annotations to `D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\evaluators_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\evaluators_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 2 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 2 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 1, 'logprobs': True, 'top_logprobs': 5, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+                                                                                                                        INFO:root:Using OAI client number 1 out of 1.                                                      | 0/2 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 2/2 [00:10<00:00,  5.11s/it]
+INFO:root:Completed 2 examples in 10.2 seconds.████████▌                                  | 1/2 [00:10<00:10, 10.22s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+ERROR:root:Error while parsing completion: '''
+{'finish_reason': 'stop', 'index': 0, 'logprobs': None, 'message': {'content': 'm', 'refusal': None, 'role': 'assistant', 'audio': None, 'function_call': None, 'tool_calls': None}, 'text': 'm', 'total_tokens': 8665.0}
+'''
+Traceback (most recent call last):
+  File "D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\annotators\base.py", line 819, in _parse_completions
+    batch_annotations = self.fn_completion_parser(completion)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\completion_parsers.py", line 273, in logprob_parser
+    assert "content" in completion["logprobs"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: argument of type 'NoneType' is not iterable
+ERROR:root:Error while parsing completion: '''
+{'finish_reason': 'stop', 'index': 0, 'logprobs': None, 'message': {'content': 'm', 'refusal': None, 'role': 'assistant', 'audio': None, 'function_call': None, 'tool_calls': None}, 'text': 'm', 'total_tokens': 8739.0}
+'''
+Traceback (most recent call last):
+  File "D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\annotators\base.py", line 819, in _parse_completions
+    batch_annotations = self.fn_completion_parser(completion)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\completion_parsers.py", line 273, in logprob_parser
+    assert "content" in completion["logprobs"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: argument of type 'NoneType' is not iterable
+WARNING:root:2 samples had no auto annotation. We are filtering them for now. If you are using chain of thought it might be that max_tokens limit is too low. 
+INFO:root:Saving all annotations to D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\evaluators_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\evaluators_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:10<00:00, 10.26s/it]
+INFO:root:drop 2 outputs that are not preferences
+INFO:root:drop 2 outputs that are not preferences
+INFO:root:Saving all results to finetune\eval\test_xiongmao
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+                      length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+qwen3.6-35b-a3b-lora                      49.06       NaN             NaN        0         596

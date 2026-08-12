@@ -1,0 +1,23 @@
+alpaca_eval --model_outputs 'finetune\eval\test_model_outputs.json' --reference_outputs finetune\eval\test_reference_outputs.json  --annotators_config 'test_xiongmao'
+INFO:root:Evaluating the qwen3.6-35b-a3b-lora outputs.
+INFO:root:Creating the annotator from `test_xiongmao`.
+INFO:root:Saving annotations to `D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\evaluators_configs\test_xiongmao\annotations_seed0_configs.json`.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 2 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 2 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+
+prompt_batches:   0%|                                                                             | 0/2 [00:00<?, ?it/s]WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.INFO:root:Using OAI client number 1 out of 1.ent configs.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 2/2 [00:09<00:00,  4.57s/it]
+INFO:root:Completed 2 examples in 9.1 seconds.█████████▌                                  | 1/2 [00:09<00:09,  9.14s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\evaluators_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:09<00:00,  9.17s/it]
+INFO:root:Saving all results to finetune\eval\test_xiongmao
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+                      length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+qwen3.6-35b-a3b-lora                      99.93    100.00            0.00        2         596

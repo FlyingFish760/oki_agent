@@ -1,0 +1,67 @@
+<|im_start|>system
+You are an expert evaluator for AI assistant alignment and capability assessment. Your task is to evaluate and rank models based on their responses to user instructions.
+<|im_end|>
+<|im_start|>user
+Evaluate responses for the following assistant capability requirement.
+
+## Capability Requirement
+
+Requirement Name:
+{requirement_title}
+
+Requirement Description:
+{requirement_description}
+
+Rank the models based on the evaluation criteria below:
+
+## Evaluation Criteria:
+
+1. Requirement Alignment
+- Does the response demonstrate the desired capability?
+- Does it reflect the expected behavior described in the requirement?
+
+2. Instruction Following
+- Does the response directly answer the user's request?
+- Does it correctly interpret the user's intent?
+
+3. Response Quality
+- Is the response accurate and helpful?
+- Is it clear, concise, and well structured?
+- Does it avoid unnecessary information or hallucinations?
+
+4. Assistant Behavior
+- Does it behave like a high-quality personal assistant?
+- Is the tone appropriate and natural?
+
+The user instruction given to these models is:
+
+## User Instruction:
+
+{
+    "instruction": """{instruction}""",
+}
+
+Here are the outputs from the models.
+
+## Model Outputs
+
+[
+    {
+        "model": "model_1",
+        "answer": """{output_1}"""
+    },
+    {
+        "model": "model_2",
+        "answer": """{output_2}"""
+    }
+]
+
+## Task:
+
+Evaluate and rank the models based on their outputs, so that the model with rank 1 has the best output. Then return a list of the model names and ranks, i.e., produce the following output:
+[
+    {'model': <model-name>, 'rank': <model-rank>},
+    {'model': <model-name>, 'rank': <model-rank>}
+]
+Your response must be a valid Python dictionary and should contain nothing else because we will directly execute it in Python. 
+<|im_end|>

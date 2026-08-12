@@ -1,0 +1,11 @@
+# alpaca eval is
+test_xiongmao:
+  prompt_template: "test_xiongmao/annotator_prompt.txt"
+  # prompt_template: "alpaca_eval_gpt4/alpaca_eval.txt"
+  fn_completions: "openai_completions"
+  completions_kwargs:
+    model_name: "gpt-5.6-sol"
+    max_tokens: 100
+    temperature: 0
+  fn_completion_parser: "ranking_parser"
+  batch_size: 1
