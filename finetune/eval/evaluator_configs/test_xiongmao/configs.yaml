@@ -9,3 +9,4 @@ test_xiongmao:
     temperature: 0
   fn_completion_parser: "ranking_parser"
   batch_size: 1
+  is_randomize_output_order: true
