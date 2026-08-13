@@ -1,0 +1,252 @@
+python finetune/eval/evaluate_alpaca_by_requirement.py `  --model-outputs finetune/eval/test_model_outputs_oki_2.json `  --reference-outputs finetune/eval/test_reference_outputs_oki_2.json `  --annotators-config E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao `  --input-keys instruction,requirement_title,requirement_description `  --output-dir finetune/eval/results_test_08_13
+[1/8] Evaluating requirement_01 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]D:\miniconda3\envs\LLM\Lib\site-packages\alpaca_eval\annotators\pairwise_evaluator.py:307: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value '1.5' has dtype incompatible with int64, please explicitly cast to a compatible dtype first.
+  df_to_annotate.loc[idcs_is_same_outputs, self.annotation_key] = 1.5
+INFO:root:Annotating 0 examples with test_xiongmao
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 33.33it/s]
+WARNING:root:Length controlled win rate is very different from the raw one: 83.9% vs 50.0%. This might be a sign of failure of the GLM.
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_01
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                      83.90     50.00           28.87        4         465
+[2/8] Evaluating requirement_02 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 4 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 4 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+                                                                                                                        INFO:root:Using OAI client number 1 out of 1.                                                      | 0/4 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+                                                                                                                        INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"     | 1/4 [00:08<00:25,  8.61s/it]
+                                                                                                                        INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"     | 3/4 [00:09<00:02,  2.71s/it]
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 4/4 [00:10<00:00,  2.72s/it]
+INFO:root:Completed 4 examples in 10.9 seconds.███████████████████████████████████████████| 4/4 [00:10<00:00,  2.11s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:10<00:00, 10.94s/it]
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_02
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                      47.37     50.00           28.87        4        1005
+[3/8] Evaluating requirement_03 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 4 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 4 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+                                                                                                                        INFO:root:Using OAI client number 1 out of 1.                                                      | 0/4 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+                                                                                                                        INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"     | 1/4 [00:07<00:23,  7.93s/it]
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 4/4 [00:09<00:00,  2.33s/it]
+INFO:root:Completed 4 examples in 9.3 seconds.█████████▌                                  | 2/4 [00:09<00:08,  4.09s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:09<00:00,  9.39s/it]
+WARNING:root:Length controlled win rate is very different from the raw one: 80.1% vs 50.0%. This might be a sign of failure of the GLM.
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_03
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                      80.11     50.00           28.87        4         393
+[4/8] Evaluating requirement_04 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 4 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 4 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+                                                                                                                        INFO:root:Using OAI client number 1 out of 1.                                                      | 0/4 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+                                                                                                                        INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"     | 1/4 [00:06<00:19,  6.46s/it]
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 4/4 [00:09<00:00,  2.38s/it]
+INFO:root:Completed 4 examples in 9.5 seconds.█████████▌                                  | 2/4 [00:09<00:08,  4.46s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:09<00:00,  9.62s/it]
+WARNING:root:Length controlled win rate is very different from the raw one: 47.2% vs 25.0%. This might be a sign of failure of the GLM.
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_04
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                      47.21     25.00           25.00        4         334
+[5/8] Evaluating requirement_05 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 4 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 4 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.                                                              INFO:root:Using OAI client number 1 out of 1.                                                      | 0/4 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+                                                                                                                        INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"     | 1/4 [00:05<00:17,  5.70s/it]
+                                                                                                                        INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"     | 2/4 [00:05<00:04,  2.45s/it]
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 4/4 [00:08<00:00,  2.14s/it]
+INFO:root:Completed 4 examples in 8.6 seconds.██████████████████████████▊                 | 3/4 [00:08<00:02,  2.56s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:08<00:00,  8.63s/it]
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_05
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                       0.07      0.00            0.00        4         453
+[6/8] Evaluating requirement_06 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 4 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 4 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+                                                                                                                        INFO:root:Using OAI client number 1 out of 1.                                                      | 0/4 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+                                                                                                                        INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"     | 1/4 [00:07<00:21,  7.29s/it]
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 4/4 [00:08<00:00,  2.06s/it]
+INFO:root:Completed 4 examples in 8.2 seconds.██████████████████████████▊                 | 3/4 [00:08<00:02,  2.24s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:08<00:00,  8.29s/it]
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_06
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                      47.26     50.00           28.87        4         534
+[7/8] Evaluating requirement_07 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 4 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 4 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+                                                                                                                        INFO:root:Using OAI client number 1 out of 1.                                                      | 0/4 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 4/4 [00:11<00:00,  2.80s/it]
+INFO:root:Completed 4 examples in 11.2 seconds.                                           | 1/4 [00:11<00:33, 11.20s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:11<00:00, 11.25s/it]
+WARNING:root:Length controlled win rate is very different from the raw one: 46.9% vs 25.0%. This might be a sign of failure of the GLM.
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_07
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                      46.90     25.00           25.00        4         518
+[8/8] Evaluating requirement_08 (4 samples)
+INFO:root:Evaluating the lora_model_v1 outputs.
+INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.
+INFO:root:Saving annotations to `E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json`.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk:   0%|                                                                           | 0/1 [00:00<?, ?it/s]INFO:root:Annotating 4 examples with test_xiongmao
+INFO:root:Using `openai_completions` on 4 prompts using gpt-5.6-sol.
+INFO:root:Kwargs to completion: {'model': 'gpt-5.6-sol', 'temperature': 0, 'is_chat': True}. num_procs=5
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+WARNING:root:D:\miniconda3\envs\LLM\Lib\client_configs\openai_configs.yaml wasn't found. We are using environment variables to construct the client configs.This is the old and non-recommended way of doing it. Please see `client_configs/README.md` for the recommended way of specifying client configs.
+                                                                                                                        INFO:root:Using OAI client number 1 out of 1.                                                      | 0/4 [00:00<?, ?it/s]
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:root:Using OAI client number 1 out of 1.
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api520.pro/v1/chat/completions "HTTP/1.1 200 OK"
+prompt_batches: 100%|█████████████████████████████████████████████████████████████████████| 4/4 [00:21<00:00,  5.45s/it]
+INFO:root:Completed 4 examples in 21.8 seconds.                                           | 1/4 [00:21<01:05, 21.81s/it]
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+WARNING:root:Unknown model gpt-5.6-sol for computing price per token.
+INFO:root:Saving all annotations to E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+INFO:root:Loading all annotations from E:\LLM\oki\oki_agent\finetune\eval\evaluator_configs\test_xiongmao\annotations_seed0_configs.json.
+Annotation chunk: 100%|███████████████████████████████████████████████████████████████████| 1/1 [00:21<00:00, 21.87s/it]
+INFO:root:Saving all results to finetune\eval\results_test_08_13\requirement_08
+INFO:root:Not saving the result to the cached leaderboard because precomputed_leaderboard is not a path but <class 'NoneType'>.
+               length_controlled_winrate  win_rate  standard_error  n_total  avg_length
+lora_model_v1                      56.93     50.00           28.87        4        2696
+Evaluation complete: finetune/eval/results_test_08_13/leaderboard.csv

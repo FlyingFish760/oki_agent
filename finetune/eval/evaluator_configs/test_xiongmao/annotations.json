@@ -9,10 +9,10 @@
     "generator_2":"qwen3.6-35b-a3b-lora",
     "annotator":"test_xiongmao",
     "preference":2.0,
+    "preference_time_per_example":4.8048149347,
     "preference_version":"alpaca_eval==0.6.6",
     "preference_price_per_example":null,
     "preference_date":"2026-08-12T11:57:45.274178",
-    "preference_time_per_example":4.8048149347,
     "preference_raw_completion":"[\n    {'model': 'model_1', 'rank': 1},\n    {'model': 'model_2', 'rank': 2}\n]"
   },
   {
@@ -25,10 +25,10 @@
     "generator_2":"qwen3.6-35b-a3b-lora",
     "annotator":"test_xiongmao",
     "preference":2.0,
+    "preference_time_per_example":4.8048149347,
     "preference_version":"alpaca_eval==0.6.6",
     "preference_price_per_example":null,
     "preference_date":"2026-08-12T11:57:45.274178",
-    "preference_time_per_example":4.8048149347,
     "preference_raw_completion":"[\n    {'model': 'model_1', 'rank': 1},\n    {'model': 'model_2', 'rank': 2}\n]"
   }
 ]
