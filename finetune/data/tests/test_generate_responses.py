@@ -7,8 +7,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from .generate_instructions import DEFAULT_IDENTITY_DESCRIPTION
-from .generate_responses import (
+from ..generate_instructions import DEFAULT_IDENTITY_DESCRIPTION
+from ..generate_responses import (
     DEFAULT_PROMPT_TEMPLATE,
     extract_response,
     run,

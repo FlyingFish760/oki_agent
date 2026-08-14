@@ -7,13 +7,13 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from .generate_all_instructions import distribute_instruction_counts, run
-from .generate_instructions import (
+from ..generate_all_instructions import distribute_instruction_counts, run
+from ..generate_instructions import (
     DEFAULT_IDENTITY_DESCRIPTION,
     DEFAULT_PROMPT_TEMPLATE,
     extract_instructions,
 )
-from .capability_card import parse_capability_card
+from ..capability_card import parse_capability_card
 
 
 CARD_PATH = Path(__file__).with_name(

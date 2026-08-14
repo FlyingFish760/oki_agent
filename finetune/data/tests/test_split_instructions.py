@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from .split_instructions import (
+from ..split_instructions import (
     SPLIT_NAMES,
     largest_remainder_counts,
     load_instruction_records,

@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from .capability_card import parse_capability_card
+from ..capability_card import parse_capability_card
 
 
 CARD_PATH = Path(__file__).with_name("Privacy_and_Data_Security_Persona_Card.md")

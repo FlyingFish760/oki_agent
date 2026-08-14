@@ -4,7 +4,7 @@ import argparse
 import unittest
 from unittest.mock import patch
 
-from .generation_common import (
+from ..generation_common import (
     TeacherPrompt,
     call_openai_compatible,
     configure_teacher_args,
