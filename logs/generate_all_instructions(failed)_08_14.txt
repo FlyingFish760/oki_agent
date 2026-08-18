@@ -1,0 +1,287 @@
+python finetune\data\generate_all_instructions.py `
+>>   --capability-card finetune\persona_cards\Privacy_and_Data_Security_Persona_Card.md `
+>>   --num-instructions 5 ` 
+>>   --total-instructions 1250 `
+>>   --teacher gemini `
+>>   --model gemini-3.5-flash-lite `
+>>   --out finetune\data\datasets\exp2_gemini_3.5_flash_1250\privacy_security_instructions.jsonl 
+Requirements: 8
+Total instructions: 1250
+Instructions per teacher call: 5
+requirement_01: target=157, teacher_calls=32
+requirement_02: target=157, teacher_calls=32
+requirement_03: target=156, teacher_calls=32
+requirement_04: target=156, teacher_calls=32
+requirement_05: target=156, teacher_calls=32
+requirement_06: target=156, teacher_calls=32
+requirement_07: target=156, teacher_calls=32
+requirement_08: target=156, teacher_calls=32
+requirement_01: 5/157
+requirement_01: 10/157
+requirement_01: 15/157
+requirement_01: 20/157
+requirement_01: 25/157
+requirement_01: 30/157
+requirement_01: 35/157
+requirement_01: 40/157
+requirement_01: 45/157
+requirement_01: 50/157
+requirement_01: 55/157
+requirement_01: 60/157
+requirement_01: 65/157
+requirement_01: 70/157
+requirement_01: 75/157
+requirement_01: 80/157
+requirement_01: 85/157
+requirement_01: 90/157
+requirement_01: 95/157
+requirement_01: 100/157
+requirement_01: 105/157
+requirement_01: 110/157
+requirement_01: 115/157
+requirement_01: 120/157
+requirement_01: 125/157
+requirement_01: 130/157
+requirement_01: 135/157
+requirement_01: 140/157
+requirement_01: 145/157
+requirement_01: 150/157
+requirement_01: 155/157
+requirement_01: 157/157
+requirement_02: 5/157
+requirement_02: 10/157
+requirement_02: 15/157
+requirement_02: 20/157
+requirement_02: 25/157
+requirement_02: 30/157
+requirement_02: 35/157
+requirement_02: 40/157
+requirement_02: 45/157
+requirement_02: 50/157
+requirement_02: 55/157
+requirement_02: 60/157
+requirement_02: 65/157
+requirement_02: 70/157
+requirement_02: 75/157
+requirement_02: 80/157
+requirement_02: 85/157
+requirement_02: 90/157
+requirement_02: 95/157
+requirement_02: 100/157
+requirement_02: 105/157
+requirement_02: 110/157
+requirement_02: 115/157
+requirement_02: 120/157
+requirement_02: 125/157
+requirement_02: 130/157
+requirement_02: 135/157
+requirement_02: 140/157
+requirement_02: 145/157
+requirement_02: 150/157
+requirement_02: 155/157
+requirement_02: 157/157
+requirement_03: 5/156
+requirement_03: 10/156
+requirement_03: 15/156
+requirement_03: 20/156
+requirement_03: 25/156
+requirement_03: 30/156
+requirement_03: 35/156
+requirement_03: 40/156
+requirement_03: 45/156
+requirement_03: 50/156
+requirement_03: 55/156
+requirement_03: 60/156
+requirement_03: 65/156
+requirement_03: 70/156
+requirement_03: 75/156
+requirement_03: 80/156
+requirement_03: 85/156
+requirement_03: 90/156
+requirement_03: 95/156
+requirement_03: 100/156
+requirement_03: 105/156
+requirement_03: 110/156
+requirement_03: 115/156
+requirement_03: 120/156
+requirement_03: 125/156
+requirement_03: 130/156
+requirement_03: 135/156
+requirement_03: 140/156
+requirement_03: 145/156
+requirement_03: 150/156
+requirement_03: 155/156
+requirement_03: 156/156
+requirement_04: 5/156
+requirement_04: 10/156
+requirement_04: 15/156
+requirement_04: 20/156
+requirement_04: 25/156
+requirement_04: 30/156
+requirement_04: 35/156
+requirement_04: 40/156
+requirement_04: 45/156
+requirement_04: 50/156
+requirement_04: 55/156
+requirement_04: 60/156
+requirement_04: 65/156
+requirement_04: 70/156
+requirement_04: 75/156
+requirement_04: 80/156
+requirement_04: 85/156
+requirement_04: 90/156
+requirement_04: 95/156
+requirement_04: 100/156
+requirement_04: 105/156
+requirement_04: 110/156
+requirement_04: 115/156
+requirement_04: 120/156
+requirement_04: 125/156
+requirement_04: 130/156
+requirement_04: 135/156
+requirement_04: 140/156
+requirement_04: 145/156
+requirement_04: 150/156
+requirement_04: 155/156
+requirement_04: 156/156
+requirement_05: 5/156
+requirement_05: 10/156
+requirement_05: 15/156
+requirement_05: 20/156
+requirement_05: 25/156
+requirement_05: 30/156
+requirement_05: 35/156
+requirement_05: 40/156
+requirement_05: 45/156
+requirement_05: 50/156
+requirement_05: 55/156
+requirement_05: 60/156
+requirement_05: 65/156
+requirement_05: 70/156
+requirement_05: 75/156
+requirement_05: 80/156
+requirement_05: 85/156
+requirement_05: 90/156
+requirement_05: 95/156
+requirement_05: 100/156
+requirement_05: 105/156
+requirement_05: 110/156
+requirement_05: 115/156
+requirement_05: 120/156
+requirement_05: 125/156
+requirement_05: 130/156
+requirement_05: 135/156
+requirement_05: 140/156
+requirement_05: 145/156
+requirement_05: 150/156
+requirement_05: 155/156
+requirement_05: 156/156
+requirement_06: 5/156
+requirement_06: 10/156
+requirement_06: 15/156
+requirement_06: 20/156
+requirement_06: 25/156
+requirement_06: 30/156
+requirement_06: 35/156
+requirement_06: 40/156
+requirement_06: 45/156
+requirement_06: 50/156
+requirement_06: 55/156
+requirement_06: 60/156
+requirement_06: 65/156
+requirement_06: 70/156
+requirement_06: 75/156
+requirement_06: 80/156
+requirement_06: 85/156
+requirement_06: 90/156
+requirement_06: 95/156
+requirement_06: 100/156
+requirement_06: 105/156
+requirement_06: 110/156
+requirement_06: 115/156
+requirement_06: 120/156
+requirement_06: 125/156
+requirement_06: 130/156
+requirement_06: 135/156
+requirement_06: 140/156
+requirement_06: 145/156
+requirement_06: 150/156
+requirement_06: 155/156
+requirement_06: 156/156
+requirement_07: 5/156
+requirement_07: 10/156
+requirement_07: 15/156
+requirement_07: 20/156
+requirement_07: 25/156
+requirement_07: 30/156
+requirement_07: 35/156
+requirement_07: 40/156
+requirement_07: 45/156
+requirement_07: 50/156
+requirement_07: 55/156
+requirement_07: 60/156
+requirement_07: 65/156
+requirement_07: 70/156
+requirement_07: 75/156
+requirement_07: 80/156
+requirement_07: 85/156
+requirement_07: 90/156
+requirement_07: 95/156
+requirement_07: 100/156
+requirement_07: 105/156
+requirement_07: 110/156
+requirement_07: 115/156
+requirement_07: 120/156
+requirement_07: 125/156
+requirement_07: 130/156
+requirement_07: 135/156
+requirement_07: 140/156
+requirement_07: 145/156
+requirement_07: 150/156
+requirement_07: 155/156
+Traceback (most recent call last):
+  File "E:\LLM\oki\oki_agent\finetune\data\generate_all_instructions.py", line 302, in <module>
+    main()
+  File "E:\LLM\oki\oki_agent\finetune\data\generate_all_instructions.py", line 298, in main
+    run(parse_args())
+  File "E:\LLM\oki\oki_agent\finetune\data\generate_all_instructions.py", line 183, in run
+    instructions = _generate_batch(
+                   ^^^^^^^^^^^^^^^^
+  File "E:\LLM\oki\oki_agent\finetune\data\generate_all_instructions.py", line 93, in _generate_batch
+    sample = call_teacher(prompt, args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\LLM\oki\oki_agent\finetune\data\generation_common.py", line 158, in call_teacher
+    return _call_gemini(prompt, args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\LLM\oki\oki_agent\finetune\data\generation_common.py", line 345, in _call_gemini
+    data = _post_json(
+           ^^^^^^^^^^^
+  File "E:\LLM\oki\oki_agent\finetune\data\generation_common.py", line 177, in _post_json
+    with urllib.request.urlopen(request, timeout=180) as response:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\urllib\request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\urllib\request.py", line 519, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\urllib\request.py", line 536, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\urllib\request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\urllib\request.py", line 1391, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\urllib\request.py", line 1352, in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\http\client.py", line 1395, in getresponse
+    response.begin()
+  File "D:\miniconda3\envs\LLM\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "D:\miniconda3\envs\LLM\Lib\http\client.py", line 294, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response

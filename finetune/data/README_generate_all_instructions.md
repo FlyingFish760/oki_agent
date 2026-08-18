@@ -51,7 +51,7 @@ calling a teacher or writing the output file:
 
 ```powershell
 python finetune\data\generate_all_instructions.py `
-  --capability-card finetune\data\Privacy_and_Data_Security_Persona_Card.md `
+  --capability-card finetune\persona_cards\Privacy_and_Data_Security_Persona_Card.md `
   --num-instructions 20 `
   --total-instructions 400 `
   --dry-run
@@ -81,7 +81,7 @@ Run generation:
 
 ```powershell
 python finetune\data\generate_all_instructions.py `
-  --capability-card finetune\data\Privacy_and_Data_Security_Persona_Card.md `
+  --capability-card finetune\persona_cards\Privacy_and_Data_Security_Persona_Card.md `
   --num-instructions 20 `
   --total-instructions 400 `
   --teacher openai `
@@ -106,7 +106,7 @@ POST {base_url}/chat/completions
 
 ```powershell
 python finetune\data\generate_all_instructions.py `
-  --capability-card finetune\data\Privacy_and_Data_Security_Persona_Card.md `
+  --capability-card finetune\persona_cards\Privacy_and_Data_Security_Persona_Card.md `
   --num-instructions 20 `
   --total-instructions 400 `
   --teacher openai-compatible `
@@ -142,7 +142,7 @@ Run generation:
 
 ```powershell
 python finetune\data\generate_all_instructions.py `
-  --capability-card finetune\data\Privacy_and_Data_Security_Persona_Card.md `
+  --capability-card finetune\persona_cards\Privacy_and_Data_Security_Persona_Card.md `
   --num-instructions 20 `
   --total-instructions 400 `
   --teacher gemini `
@@ -156,7 +156,7 @@ Start Ollama and make sure the teacher model is available locally, then run:
 
 ```powershell
 python finetune\data\generate_all_instructions.py `
-  --capability-card finetune\data\Privacy_and_Data_Security_Persona_Card.md `
+  --capability-card finetune\persona_cards\Privacy_and_Data_Security_Persona_Card.md `
   --num-instructions 20 `
   --total-instructions 400 `
   --teacher ollama `
@@ -269,8 +269,32 @@ retried. Configure this behavior with:
 
 Each accepted instruction is appended immediately. If generation stops because
 a batch exhausts its retries, the JSONL file remains on disk with the records
-that were successfully generated before the failure. Rerunning the command
-starts over and truncates that file again.
+that were successfully generated before the failure.
+
+Without `--resume`, rerunning the command starts over and truncates the output.
+To validate and continue the existing JSONL, rerun the same command with:
+
+```powershell
+--resume `
+--max-retries 6 `
+--retry-sleep 2
+```
+
+Resume mode validates the complete file before appending anything. It checks:
+
+- every line is a JSON object with a non-empty instruction;
+- record IDs are continuous from `capability_instruction_000001`;
+- requirement IDs follow capability-card order and do not exceed their target;
+- `capability_card`, `prompt_template`, and `teacher_model` match the current
+  command.
+
+`requirement_title` and `requirement_description` are deliberately not compared
+with the current capability card. Existing values for those fields remain
+unchanged, while newly generated records use the current card values.
+
+After validation, completed requirements are skipped, a partially generated
+requirement continues from its existing count, and record IDs continue from the
+last valid record. If validation fails, the existing file is not modified.
 
 ## Other Arguments
 
@@ -283,6 +307,8 @@ starts over and truncates that file again.
 - `--temperature`: teacher sampling temperature; default `0.8`.
 - `--top-p`: teacher nucleus sampling parameter; default `0.9`.
 - `--no-json-response-format`: disable the backend JSON-output hint.
+- `--resume`: validate and continue the existing `--out` JSONL instead of
+  truncating it.
 
 Show the complete CLI reference:
 
@@ -296,9 +322,9 @@ Run the parser and all-requirements generator tests:
 
 ```powershell
 python -m unittest `
-  finetune.data.test_generation_common `
-  finetune.data.test_capability_card `
-  finetune.data.test_generate_all_instructions
+  finetune.data.tests.test_generation_common `
+  finetune.data.tests.test_capability_card `
+  finetune.data.tests.test_generate_all_instructions
 ```
 
 The generator test uses a mock teacher, so it does not require an API key or

@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import time
 import urllib.error
+from collections import Counter
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -54,6 +57,16 @@ DEFAULT_OUTPUT = Path(
 )
 
 
+@dataclass(frozen=True)
+class ResumeState:
+    record_count: int
+    requirement_counts: dict[str, int]
+
+    @property
+    def next_record_id(self) -> int:
+        return self.record_count + 1
+
+
 def distribute_instruction_counts(
     card: CapabilityCard,
     total_instructions: int,
@@ -72,6 +85,98 @@ def distribute_instruction_counts(
         requirement.requirement_id: base_count + (index < remainder)
         for index, requirement in enumerate(card.requirements)
     }
+
+
+def load_resume_state(
+    *,
+    path: Path,
+    card: CapabilityCard,
+    card_path: Path,
+    targets: dict[str, int],
+    prompt_template: Path,
+    teacher_model: str,
+) -> ResumeState:
+    if not path.exists():
+        raise FileNotFoundError(f"Resume output does not exist: {path}")
+
+    expected_requirements = [
+        requirement.requirement_id
+        for requirement in card.requirements
+        for _ in range(targets[requirement.requirement_id])
+    ]
+    expected_card = card_path.name
+    expected_template = prompt_template_name(prompt_template)
+    counts: Counter[str] = Counter()
+    record_count = 0
+
+    with path.open("r", encoding="utf-8") as source:
+        for line_number, line in enumerate(source, start=1):
+            if not line.strip():
+                raise ValueError(
+                    f"{path}:{line_number}: blank lines are not allowed when "
+                    "resuming"
+                )
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    f"{path}:{line_number}: invalid JSON: {exc.msg}"
+                ) from exc
+            if not isinstance(record, dict):
+                raise ValueError(
+                    f"{path}:{line_number}: each JSONL line must be an object"
+                )
+            if line_number > len(expected_requirements):
+                raise ValueError(
+                    f"{path} already contains more than "
+                    f"{sum(targets.values())} target records"
+                )
+
+            expected_id = f"capability_instruction_{line_number:06d}"
+            if record.get("id") != expected_id:
+                raise ValueError(
+                    f"{path}:{line_number}: expected id {expected_id!r}, "
+                    f"found {record.get('id')!r}"
+                )
+
+            expected_requirement = expected_requirements[line_number - 1]
+            requirement_id = record.get("requirement_id")
+            if requirement_id != expected_requirement:
+                raise ValueError(
+                    f"{path}:{line_number}: expected requirement_id "
+                    f"{expected_requirement!r}, found {requirement_id!r}"
+                )
+
+            metadata_checks = {
+                "capability_card": expected_card,
+                "prompt_template": expected_template,
+                "teacher_model": teacher_model,
+            }
+            for field, expected_value in metadata_checks.items():
+                if record.get(field) != expected_value:
+                    raise ValueError(
+                        f"{path}:{line_number}: expected {field}="
+                        f"{expected_value!r}, found {record.get(field)!r}"
+                    )
+
+            instruction = record.get("instruction")
+            if not isinstance(instruction, str) or not instruction.strip():
+                raise ValueError(
+                    f"{path}:{line_number}: instruction must be a non-empty "
+                    "string"
+                )
+
+            counts[requirement_id] += 1
+            record_count += 1
+
+    requirement_counts = {
+        requirement.requirement_id: counts[requirement.requirement_id]
+        for requirement in card.requirements
+    }
+    return ResumeState(
+        record_count=record_count,
+        requirement_counts=requirement_counts,
+    )
 
 
 def _generate_batch(
@@ -169,16 +274,45 @@ def run(args: argparse.Namespace) -> None:
 
     template = args.prompt_template.read_text(encoding="utf-8")
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text("", encoding="utf-8")
-
-    record_id = 1
+    if args.resume:
+        resume_state = load_resume_state(
+            path=args.out,
+            card=card,
+            card_path=args.capability_card,
+            targets=targets,
+            prompt_template=args.prompt_template,
+            teacher_model=args.model,
+        )
+        existing_counts = resume_state.requirement_counts
+        record_id = resume_state.next_record_id
+        print(f"Resume: found {resume_state.record_count} valid records")
+        print(f"Next record ID: capability_instruction_{record_id:06d}")
+    else:
+        args.out.write_text("", encoding="utf-8")
+        existing_counts = {
+            requirement.requirement_id: 0
+            for requirement in card.requirements
+        }
+        record_id = 1
 
     for requirement in card.requirements:
         target = targets[requirement.requirement_id]
-        generated_for_requirement: list[str] = []
+        generated_for_requirement = existing_counts[requirement.requirement_id]
 
-        while len(generated_for_requirement) < target:
-            remaining = target - len(generated_for_requirement)
+        if generated_for_requirement == target:
+            print(
+                f"{requirement.requirement_id}: "
+                f"{generated_for_requirement}/{target}, already complete"
+            )
+            continue
+        if generated_for_requirement:
+            print(
+                f"{requirement.requirement_id}: resuming from "
+                f"{generated_for_requirement}/{target}"
+            )
+
+        while generated_for_requirement < target:
+            remaining = target - generated_for_requirement
             batch_size = min(args.num_instructions, remaining)
             instructions = _generate_batch(
                 args=args,
@@ -200,11 +334,11 @@ def run(args: argparse.Namespace) -> None:
                     ),
                 )
                 record_id += 1
-                generated_for_requirement.append(instruction)
+                generated_for_requirement += 1
 
             print(
                 f"{requirement.requirement_id}: "
-                f"{len(generated_for_requirement)}/{target}"
+                f"{generated_for_requirement}/{target}"
             )
 
     generated_total = record_id - 1
@@ -278,6 +412,14 @@ def parse_args() -> argparse.Namespace:
         "--dry-run",
         action="store_true",
         help="Print the distribution plan without calling the teacher.",
+    )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help=(
+            "Validate and continue an existing output JSONL instead of "
+            "truncating it."
+        ),
     )
     add_teacher_arguments(parser)
 

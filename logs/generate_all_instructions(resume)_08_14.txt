@@ -1,0 +1,62 @@
+ python finetune\data\generate_all_instructions.py `
+>>   --capability-card finetune\persona_cards\Privacy_and_Data_Security_Persona_Card.md `
+>>   --num-instructions 5 `
+>>   --total-instructions 1250 `
+>>   --teacher gemini `
+>>   --model gemini-3.5-flash-lite `
+>>   --out finetune\data\datasets\exp2_gemini_3.5_flash_1250\privacy_security_instructions.jsonl `
+>>   --resume
+Requirements: 8
+Total instructions: 1250
+Instructions per teacher call: 5
+requirement_01: target=157, teacher_calls=32
+requirement_02: target=157, teacher_calls=32
+requirement_03: target=156, teacher_calls=32
+requirement_04: target=156, teacher_calls=32
+requirement_05: target=156, teacher_calls=32
+requirement_06: target=156, teacher_calls=32
+requirement_07: target=156, teacher_calls=32
+requirement_08: target=156, teacher_calls=32
+Resume: found 1093 valid records
+Next record ID: capability_instruction_001094
+requirement_01: 157/157, already complete
+requirement_02: 157/157, already complete
+requirement_03: 156/156, already complete
+requirement_04: 156/156, already complete
+requirement_05: 156/156, already complete
+requirement_06: 156/156, already complete
+requirement_07: resuming from 155/156
+requirement_07: 156/156
+requirement_08: 5/156
+requirement_08: 10/156
+requirement_08: 15/156
+requirement_08: 20/156
+requirement_08: 25/156
+requirement_08: 30/156
+requirement_08: 35/156
+requirement_08: 40/156
+requirement_08: 45/156
+requirement_08: 50/156
+requirement_08: 55/156
+requirement_08: 60/156
+requirement_08: 65/156
+requirement_08: 70/156
+requirement_08: 75/156
+requirement_08: 80/156
+requirement_08: 85/156
+requirement_08: 90/156
+requirement_08: 95/156
+requirement_08: 100/156
+requirement_08: 105/156
+requirement_08: 110/156
+requirement_08: 115/156
+requirement_08: 120/156
+requirement_08: 125/156
+requirement_08: 130/156
+requirement_08: 135/156
+requirement_08: 140/156
+requirement_08: 145/156
+requirement_08: 150/156
+requirement_08: 155/156
+requirement_08: 156/156
+Generation complete: wrote 1250 instructions to finetune\data\datasets\exp2_gemini_3.5_flash_1250\privacy_security_instructions.jsonl

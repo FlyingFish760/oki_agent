@@ -7,7 +7,11 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from ..generate_all_instructions import distribute_instruction_counts, run
+from ..generate_all_instructions import (
+    distribute_instruction_counts,
+    load_resume_state,
+    run,
+)
 from ..generate_instructions import (
     DEFAULT_IDENTITY_DESCRIPTION,
     DEFAULT_PROMPT_TEMPLATE,
@@ -16,8 +20,10 @@ from ..generate_instructions import (
 from ..capability_card import parse_capability_card
 
 
-CARD_PATH = Path(__file__).with_name(
-    "Privacy_and_Data_Security_Persona_Card.md"
+CARD_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "persona_cards"
+    / "Privacy_and_Data_Security_Persona_Card.md"
 )
 
 
@@ -65,6 +71,7 @@ class GenerateAllInstructionsTest(unittest.TestCase):
                 max_retries=1,
                 retry_sleep=0,
                 dry_run=False,
+                resume=False,
                 teacher="openai",
                 model="mock-teacher",
                 base_url="https://example.invalid",
@@ -92,6 +99,93 @@ class GenerateAllInstructionsTest(unittest.TestCase):
         )
         self.assertTrue(all(row["teacher_model"] == "mock-teacher" for row in rows))
         self.assertTrue(all(isinstance(row["instruction"], str) for row in rows))
+
+    def test_resume_skips_complete_requirements_and_ignores_titles(self) -> None:
+        card = parse_capability_card(CARD_PATH)
+        with tempfile.TemporaryDirectory() as directory:
+            output_path = Path(directory) / "instructions.jsonl"
+            existing = []
+            for index, requirement in enumerate(card.requirements[:7], start=1):
+                existing.append(
+                    {
+                        "id": f"capability_instruction_{index:06d}",
+                        "capability_card": CARD_PATH.name,
+                        "requirement_id": requirement.requirement_id,
+                        "requirement_title": "An intentionally stale title",
+                        "requirement_description": "Intentionally stale text",
+                        "prompt_template": DEFAULT_PROMPT_TEMPLATE.stem,
+                        "teacher_model": "mock-teacher",
+                        "instruction": f"Existing instruction {index}.",
+                    }
+                )
+            output_path.write_text(
+                "".join(json.dumps(row) + "\n" for row in existing),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                capability_card=CARD_PATH,
+                num_instructions=3,
+                total_instructions=8,
+                prompt_template=DEFAULT_PROMPT_TEMPLATE,
+                identity_description=DEFAULT_IDENTITY_DESCRIPTION,
+                out=output_path,
+                max_retries=1,
+                retry_sleep=0,
+                dry_run=False,
+                resume=True,
+                teacher="openai",
+                model="mock-teacher",
+                base_url="https://example.invalid",
+                api_key="",
+                json_response_format=True,
+                temperature=0.8,
+                top_p=0.9,
+            )
+
+            with patch(
+                "finetune.data.generate_all_instructions.call_teacher",
+                return_value={"instructions": ["Final instruction."]},
+            ) as teacher:
+                run(args)
+
+            rows = [
+                json.loads(line)
+                for line in output_path.read_text(encoding="utf-8").splitlines()
+            ]
+
+        teacher.assert_called_once()
+        self.assertEqual(len(rows), 8)
+        self.assertEqual(rows[-1]["id"], "capability_instruction_000008")
+        self.assertEqual(rows[-1]["requirement_id"], "requirement_08")
+
+    def test_resume_rejects_metadata_mismatch_without_modifying_file(self) -> None:
+        card = parse_capability_card(CARD_PATH)
+        targets = distribute_instruction_counts(card, 8)
+        with tempfile.TemporaryDirectory() as directory:
+            output_path = Path(directory) / "instructions.jsonl"
+            original = json.dumps(
+                {
+                    "id": "capability_instruction_000001",
+                    "capability_card": CARD_PATH.name,
+                    "requirement_id": "requirement_01",
+                    "prompt_template": DEFAULT_PROMPT_TEMPLATE.stem,
+                    "teacher_model": "different-teacher",
+                    "instruction": "Existing instruction.",
+                }
+            ) + "\n"
+            output_path.write_text(original, encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "teacher_model"):
+                load_resume_state(
+                    path=output_path,
+                    card=card,
+                    card_path=CARD_PATH,
+                    targets=targets,
+                    prompt_template=DEFAULT_PROMPT_TEMPLATE,
+                    teacher_model="mock-teacher",
+                )
+
+            self.assertEqual(output_path.read_text(encoding="utf-8"), original)
 
 
 if __name__ == "__main__":
