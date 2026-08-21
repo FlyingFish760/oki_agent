@@ -1,0 +1,222 @@
+
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 998 examples [00:00, 58623.80 examples/s]
+Generating test split: 0 examples [00:00, ? examples/s]Generating test split: 128 examples [00:00, 16068.69 examples/s]
+Map:   0%|          | 0/998 [00:00<?, ? examples/s]Map:   0%|          | 0/998 [00:00<?, ? examples/s]Map:   0%|          | 0/998 [00:00<?, ? examples/s]Map: 100%|██████████| 998/998 [00:00<00:00, 13217.71 examples/s]
+Map:   0%|          | 0/128 [00:00<?, ? examples/s]Map: 100%|██████████| 128/128 [00:00<00:00, 10536.38 examples/s]
+Map: 100%|██████████| 998/998 [00:00<00:00, 11458.50 examples/s]
+Map: 100%|██████████| 998/998 [00:00<00:00, 12822.45 examples/s]
+Tokenizing train dataset:   0%|          | 0/998 [00:00<?, ? examples/s]Tokenizing train dataset:   3%|▎         | 26/998 [00:00<00:05, 178.42 examples/s]Tokenizing train dataset:   8%|▊         | 79/998 [00:00<00:02, 348.32 examples/s]Tokenizing train dataset:  13%|█▎        | 133/998 [00:00<00:02, 421.61 examples/s]Tokenizing train dataset:  19%|█▊        | 186/998 [00:00<00:01, 458.05 examples/s]Tokenizing train dataset:  24%|██▍       | 241/998 [00:00<00:01, 486.58 examples/s]Tokenizing train dataset:  30%|██▉       | 297/998 [00:00<00:01, 506.14 examples/s]Tokenizing train dataset:  35%|███▌      | 354/998 [00:00<00:01, 523.29 examples/s]Tokenizing train dataset:  43%|████▎     | 431/998 [00:00<00:01, 516.36 examples/s]Tokenizing train dataset:  51%|█████     | 506/998 [00:01<00:00, 507.96 examples/s]Tokenizing train dataset:  56%|█████▌    | 560/998 [00:01<00:00, 512.68 examples/s]Tokenizing train dataset:  62%|██████▏   | 614/998 [00:01<00:00, 518.50 examples/s]Tokenizing train dataset:  69%|██████▉   | 692/998 [00:01<00:00, 513.65 examples/s]Tokenizing train dataset:  75%|███████▍  | 745/998 [00:01<00:00, 514.90 examples/s]Tokenizing train dataset:  80%|███████▉  | 798/998 [00:01<00:00, 515.85 examples/s]Tokenizing train dataset:  85%|████████▌ | 850/998 [00:01<00:00, 516.34 examples/s]Tokenizing train dataset:  92%|█████████▏| 918/998 [00:01<00:00, 489.33 examples/s]Tokenizing train dataset:  98%|█████████▊| 979/998 [00:02<00:00, 459.30 examples/s]Tokenizing train dataset: 100%|██████████| 998/998 [00:02<00:00, 461.44 examples/s]
+Truncating train dataset:   0%|          | 0/998 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 998/998 [00:00<00:00, 105822.51 examples/s]
+Tokenizing eval dataset:   0%|          | 0/128 [00:00<?, ? examples/s]Tokenizing eval dataset:  55%|█████▌    | 71/128 [00:00<00:00, 687.14 examples/s]Tokenizing eval dataset: 100%|██████████| 128/128 [00:00<00:00, 629.06 examples/s]
+Truncating eval dataset:   0%|          | 0/128 [00:00<?, ? examples/s]Truncating eval dataset: 100%|██████████| 128/128 [00:00<00:00, 34991.26 examples/s]
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[RANK 0] Gradient accumulation steps mismatch: GradientAccumulationPlugin has 1, DeepSpeed config has 4. Using DeepSpeed's value.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'bos_token_id': None, 'pad_token_id': 248044}.
+  0%|          | 0/126 [00:00<?, ?it/s]  1%|          | 1/126 [00:59<2:03:02, 59.06s/it]  2%|▏         | 2/126 [01:46<1:48:04, 52.30s/it]  2%|▏         | 3/126 [02:34<1:42:38, 50.07s/it]  3%|▎         | 4/126 [03:21<1:39:40, 49.02s/it]  4%|▍         | 5/126 [04:08<1:37:34, 48.39s/it]                                                 {'loss': '1.514', 'grad_norm': '1.058', 'learning_rate': '2e-05', 'entropy': '0.7865', 'num_tokens': '8215', 'mean_token_accuracy': '0.6222', 'epoch': '0.08'}
+  4%|▍         | 5/126 [04:08<1:37:34, 48.39s/it]  5%|▍         | 6/126 [04:56<1:36:10, 48.08s/it]  6%|▌         | 7/126 [05:43<1:34:58, 47.89s/it]  6%|▋         | 8/126 [06:30<1:33:48, 47.70s/it]  7%|▋         | 9/126 [07:18<1:32:54, 47.64s/it]  8%|▊         | 10/126 [08:05<1:31:55, 47.55s/it]                                                  {'loss': '1.516', 'grad_norm': '1.211', 'learning_rate': '1.918e-05', 'entropy': '0.8016', 'num_tokens': '1.73e+04', 'mean_token_accuracy': '0.6252', 'epoch': '0.16'}
+  8%|▊         | 10/126 [08:05<1:31:55, 47.55s/it]  9%|▊         | 11/126 [08:53<1:31:02, 47.50s/it] 10%|▉         | 12/126 [09:40<1:30:18, 47.53s/it] 10%|█         | 13/126 [10:28<1:29:28, 47.51s/it] 11%|█         | 14/126 [11:15<1:28:39, 47.49s/it] 12%|█▏        | 15/126 [12:03<1:27:49, 47.47s/it]                                                  {'loss': '1.357', 'grad_norm': '1.029', 'learning_rate': '1.836e-05', 'entropy': '0.842', 'num_tokens': '2.548e+04', 'mean_token_accuracy': '0.6365', 'epoch': '0.24'}
+ 12%|█▏        | 15/126 [12:03<1:27:49, 47.47s/it] 13%|█▎        | 16/126 [12:50<1:26:58, 47.44s/it] 13%|█▎        | 17/126 [13:37<1:26:08, 47.42s/it] 14%|█▍        | 18/126 [14:25<1:25:20, 47.41s/it] 15%|█▌        | 19/126 [15:12<1:24:35, 47.43s/it] 16%|█▌        | 20/126 [16:00<1:23:47, 47.43s/it]                                                  {'loss': '1.365', 'grad_norm': '0.8825', 'learning_rate': '1.754e-05', 'entropy': '0.9094', 'num_tokens': '3.426e+04', 'mean_token_accuracy': '0.6312', 'epoch': '0.32'}
+ 16%|█▌        | 20/126 [16:00<1:23:47, 47.43s/it] 17%|█▋        | 21/126 [16:47<1:23:06, 47.49s/it] 17%|█▋        | 22/126 [17:35<1:22:19, 47.50s/it] 18%|█▊        | 23/126 [18:22<1:21:28, 47.46s/it] 19%|█▉        | 24/126 [19:10<1:20:39, 47.44s/it] 20%|█▉        | 25/126 [19:57<1:19:51, 47.44s/it]                                                  {'loss': '1.296', 'grad_norm': '0.7381', 'learning_rate': '1.672e-05', 'entropy': '0.9465', 'num_tokens': '4.348e+04', 'mean_token_accuracy': '0.6326', 'epoch': '0.4'}
+ 20%|█▉        | 25/126 [19:57<1:19:51, 47.44s/it] 21%|██        | 26/126 [20:45<1:19:05, 47.45s/it]
+  0%|          | 0/4 [00:00<?, ?it/s][A
+ 50%|█████     | 2/4 [00:06<00:06,  3.12s/it][A
+ 75%|███████▌  | 3/4 [00:12<00:04,  4.47s/it][A[rank2]: Traceback (most recent call last):
+[rank2]:   File "/root/autodl-tmp/oki-agent/finetune/train_lora.py", line 216, in <module>
+[rank2]:     main(script_args, training_args, model_args, dataset_args)
+[rank2]:   File "/root/autodl-tmp/oki-agent/finetune/train_lora.py", line 185, in main
+[rank2]:     trainer.train()
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank2]:     return inner_training_loop(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1515, in _inner_training_loop
+[rank2]:     self._run_epoch(
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1784, in _run_epoch
+[rank2]:     self._maybe_log_save_evaluate(
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2095, in _maybe_log_save_evaluate
+[rank2]:     metrics = self._evaluate(trial, ignore_keys_for_eval)
+[rank2]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 3016, in _evaluate
+[rank2]:     metrics = self.evaluate(ignore_keys=ignore_keys_for_eval)
+[rank2]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2603, in evaluate
+[rank2]:     output = self.evaluation_loop(
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2728, in evaluation_loop
+[rank2]:     losses, logits, labels = self.prediction_step(model, inputs, prediction_loss_only, ignore_keys=ignore_keys)
+[rank2]:                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/trl/trainer/sft_trainer.py", line 1333, in prediction_step
+[rank2]:     return super().prediction_step(model, inputs, prediction_loss_only, ignore_keys=ignore_keys)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2982, in prediction_step
+[rank2]:     loss, outputs = self.compute_loss(
+[rank2]:                     ^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/trl/trainer/sft_trainer.py", line 1234, in compute_loss
+[rank2]:     (loss, outputs) = super().compute_loss(
+[rank2]:                       ^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1987, in compute_loss
+[rank2]:     outputs = model(**inputs)
+[rank2]:               ^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank2]:     return self._call_impl(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1879, in _call_impl
+[rank2]:     return inner()
+[rank2]:            ^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1827, in inner
+[rank2]:     result = forward_call(*args, **kwargs)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/peft/peft_model.py", line 1993, in forward
+[rank2]:     return self.base_model(
+[rank2]:            ^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank2]:     return self._call_impl(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1879, in _call_impl
+[rank2]:     return inner()
+[rank2]:            ^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1827, in inner
+[rank2]:     result = forward_call(*args, **kwargs)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 330, in forward
+[rank2]:     return self.model.forward(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 907, in wrapper
+[rank2]:     output = func(self, *args, **kwargs)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/models/qwen3_5_moe/modeling_qwen3_5_moe.py", line 2035, in forward
+[rank2]:     loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.text_config.vocab_size)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/loss/loss_utils.py", line 70, in ForCausalLMLoss
+[rank2]:     loss = fixed_cross_entropy(logits, shift_labels, num_items_in_batch, ignore_index, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/loss/loss_utils.py", line 40, in fixed_cross_entropy
+[rank2]:     loss = nn.functional.cross_entropy(source, target, ignore_index=ignore_index, reduction=reduction)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 3462, in cross_entropy
+[rank2]:     return torch._C._nn.cross_entropy_loss(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.97 GiB. GPU 2 has a total capacity of 31.48 GiB of which 95.56 MiB is free. Including non-PyTorch memory, this process has 31.37 GiB memory in use. Of the allocated memory 28.05 GiB is allocated by PyTorch, and 2.88 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/root/autodl-tmp/oki-agent/finetune/train_lora.py", line 216, in <module>
+[rank3]:     main(script_args, training_args, model_args, dataset_args)
+[rank3]:   File "/root/autodl-tmp/oki-agent/finetune/train_lora.py", line 185, in main
+[rank3]:     trainer.train()
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank3]:     return inner_training_loop(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1515, in _inner_training_loop
+[rank3]:     self._run_epoch(
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1784, in _run_epoch
+[rank3]:     self._maybe_log_save_evaluate(
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2095, in _maybe_log_save_evaluate
+[rank3]:     metrics = self._evaluate(trial, ignore_keys_for_eval)
+[rank3]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 3016, in _evaluate
+[rank3]:     metrics = self.evaluate(ignore_keys=ignore_keys_for_eval)
+[rank3]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2603, in evaluate
+[rank3]:     output = self.evaluation_loop(
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2728, in evaluation_loop
+[rank3]:     losses, logits, labels = self.prediction_step(model, inputs, prediction_loss_only, ignore_keys=ignore_keys)
+[rank3]:                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/trl/trainer/sft_trainer.py", line 1333, in prediction_step
+[rank3]:     return super().prediction_step(model, inputs, prediction_loss_only, ignore_keys=ignore_keys)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 2982, in prediction_step
+[rank3]:     loss, outputs = self.compute_loss(
+[rank3]:                     ^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/trl/trainer/sft_trainer.py", line 1234, in compute_loss
+[rank3]:     (loss, outputs) = super().compute_loss(
+[rank3]:                       ^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/trainer.py", line 1987, in compute_loss
+[rank3]:     outputs = model(**inputs)
+[rank3]:               ^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank3]:     return self._call_impl(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1879, in _call_impl
+[rank3]:     return inner()
+[rank3]:            ^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1827, in inner
+[rank3]:     result = forward_call(*args, **kwargs)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/peft/peft_model.py", line 1993, in forward
+[rank3]:     return self.base_model(
+[rank3]:            ^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+[rank3]:     return self._call_impl(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1879, in _call_impl
+[rank3]:     return inner()
+[rank3]:            ^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1827, in inner
+[rank3]:     result = forward_call(*args, **kwargs)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 330, in forward
+[rank3]:     return self.model.forward(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 907, in wrapper
+[rank3]:     output = func(self, *args, **kwargs)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/models/qwen3_5_moe/modeling_qwen3_5_moe.py", line 2035, in forward
+[rank3]:     loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.text_config.vocab_size)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/loss/loss_utils.py", line 70, in ForCausalLMLoss
+[rank3]:     loss = fixed_cross_entropy(logits, shift_labels, num_items_in_batch, ignore_index, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/transformers/loss/loss_utils.py", line 40, in fixed_cross_entropy
+[rank3]:     loss = nn.functional.cross_entropy(source, target, ignore_index=ignore_index, reduction=reduction)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 3462, in cross_entropy
+[rank3]:     return torch._C._nn.cross_entropy_loss(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 3.03 GiB. GPU 3 has a total capacity of 31.48 GiB of which 505.56 MiB is free. Including non-PyTorch memory, this process has 30.97 GiB memory in use. Of the allocated memory 28.14 GiB is allocated by PyTorch, and 2.39 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+W0818 12:05:17.970000 4199 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 4473 closing signal SIGTERM
+W0818 12:05:17.976000 4199 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 4474 closing signal SIGTERM
+W0818 12:05:17.985000 4199 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 4476 closing signal SIGTERM
+E0818 12:05:18.452000 4199 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 2 (pid: 4475) of binary: /root/autodl-tmp/oki-agent/.venv/bin/python3
+Traceback (most recent call last):
+  File "/root/autodl-tmp/oki-agent/.venv/bin/accelerate", line 10, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/accelerate/commands/accelerate_cli.py", line 50, in main
+    args.func(args)
+  File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/accelerate/commands/launch.py", line 1392, in launch_command
+    deepspeed_launcher(args)
+  File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/accelerate/commands/launch.py", line 1076, in deepspeed_launcher
+    distrib_run.run(args)
+  File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/distributed/run.py", line 892, in run
+    elastic_launch(
+  File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 143, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/oki-agent/.venv/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 277, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/root/autodl-tmp/oki-agent/finetune/train_lora.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-18_12:05:17
+  host      : localhost
+  rank      : 2 (local_rank: 2)
+  exitcode  : 1 (pid: 4475)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
