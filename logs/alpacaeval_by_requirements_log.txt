@@ -1,4 +1,6 @@
-python finetune/eval/evaluate_alpaca_by_requirement.py `  --model-outputs finetune/eval/test_model_outputs_oki_2.json `  --reference-outputs finetune/eval/test_reference_outputs_oki_2.json `  --annotators-config E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao `  --input-keys instruction,requirement_title,requirement_description `  --output-dir finetune/eval/results_test_08_13
+> $env:OPENAI_API_BASE = "https://api520.pro/v1"
+> $env:OPENAI_API_KEY = ""
+> python finetune/eval/evaluate_alpaca_by_requirement.py `  --model-outputs finetune/eval/test_model_outputs_oki_2.json `  --reference-outputs finetune/eval/test_reference_outputs_oki_2.json `  --annotators-config E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao `  --input-keys instruction,requirement_title,requirement_description `  --output-dir finetune/eval/results_test_08_13
 [1/8] Evaluating requirement_01 (4 samples)
 INFO:root:Evaluating the lora_model_v1 outputs.
 INFO:root:Creating the annotator from `E:/LLM/oki/oki_agent/finetune/eval/evaluator_configs/test_xiongmao`.

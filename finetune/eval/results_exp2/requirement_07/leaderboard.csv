@@ -1,0 +1,2 @@
+,win_rate,standard_error,mode,avg_length,n_wins,n_wins_base,n_draws,n_total,discrete_win_rate,length_controlled_winrate,lc_standard_error
+lora_model_exp2,36.666666666666664,12.408394495995603,community,310,5,9,1,15,36.666666666666664,62.25054084810158,3.301339500202257
