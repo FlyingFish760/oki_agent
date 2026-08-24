@@ -1,0 +1,4 @@
+/autodl-tmp/oki-agent# uv run python finetune/eval/generate_alpaca.py --instructions /root/autodl-tmp/oki-agent/finetune/data/datasets/exp2_gemini_3.5_flash_1250/privacy_security_instructions_test.jsonl --capability-card /root/autodl-tmp/oki-agent/finetune/data/persona_cards/Privacy_and_Data_Security_Persona_Card.md --model baseline --out /root/autodl-tmp/oki-agent/finetune/eval/model_generation/baseline_outputs_exp2.json
+Live JSONL output: /root/autodl-tmp/oki-agent/finetune/eval/model_generation/baseline_outputs_exp2.json.partial.jsonl
+[122/122] generated
+Generation complete: wrote 122 records to /root/autodl-tmp/oki-agent/finetune/eval/model_generation/baseline_outputs_exp2.json
